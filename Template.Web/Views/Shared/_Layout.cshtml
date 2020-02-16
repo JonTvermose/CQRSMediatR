@@ -18,17 +18,18 @@
 <body>
     @RenderBody()
 
-    <script src="~/bundles/app.js" asp-append-version="true"></script>
-
     @* Routes used for frontend *@
-    <script type="text/javascript">
+    <script>
         var defaults = {
-            projectName = "CQRS MediatR Template",
-            jsonRoutes = {
+            projectName: 'CQRS MediatR Template',
+            jsonRoutes: {
                 home: '@Url.Action("Index", "Home")',
-            }
-        }
+                getlogentries: '@Url.Action("GetLogEntries", "LogEntry")',
+            },
+        };
     </script>
+
+    <script src="~/bundles/app.js" asp-append-version="true"></script>
 
     @RenderSection("Scripts", required: false)
 </body>

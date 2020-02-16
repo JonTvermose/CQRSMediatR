@@ -25,6 +25,7 @@ namespace Template.Web.Controllers
 
         public IActionResult Privacy()
         {
+            throw new ArgumentNullException(nameof(User));
             return View();
         }
 

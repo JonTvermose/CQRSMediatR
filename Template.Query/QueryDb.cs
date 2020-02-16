@@ -14,11 +14,11 @@ namespace Template.Core.Query
 
         public QueryDb(ApplicationDbContext dbContext, LogDbContext logDbContext)
         {
-            _dbContext.ChangeTracker.QueryTrackingBehavior = Microsoft.EntityFrameworkCore.QueryTrackingBehavior.NoTracking;
             _dbContext = dbContext;
+            _dbContext.ChangeTracker.QueryTrackingBehavior = Microsoft.EntityFrameworkCore.QueryTrackingBehavior.NoTracking;
 
-            _logDbContext.ChangeTracker.QueryTrackingBehavior = Microsoft.EntityFrameworkCore.QueryTrackingBehavior.NoTracking;
             _logDbContext = logDbContext;
+            _logDbContext.ChangeTracker.QueryTrackingBehavior = Microsoft.EntityFrameworkCore.QueryTrackingBehavior.NoTracking;
         }
 
         public IQueryable<LogEntry> LogEntries => _logDbContext.LogEntries.AsQueryable();

@@ -9,5 +9,10 @@ namespace Template.Core.Command
     public class InsertLogEntryCommand : IRequest
     {
         public ExceptionContext ExceptionContext { get; set; }
+
+        public InsertLogEntryCommand(ExceptionContext exceptionContext)
+        {
+            ExceptionContext = exceptionContext;
+        }
     }
 }

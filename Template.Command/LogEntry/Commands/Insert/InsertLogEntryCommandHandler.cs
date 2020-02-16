@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Template.Core.Data;
@@ -39,11 +40,30 @@ namespace Template.Core.Command
             };
             try
             {
-                // TODO doesnt read actual contents of request
-                using (var reader = new StreamReader(context.HttpContext.Request.Body))
+                if(context.HttpContext.Request.Method == "GET")
                 {
-                    var body = reader.ReadToEndAsync().GetAwaiter().GetResult();
-                    log.Data = body;
+                    log.Data = context.HttpContext.Request.QueryString.Value;
+                } 
+                else if (context.HttpContext.Request.Method == "POST")
+                {
+                    if (context.HttpContext.Request.HasFormContentType)
+                    {
+                        var form = context.HttpContext.Request.ReadFormAsync().GetAwaiter().GetResult();
+                        var options = new JsonSerializerOptions
+                        {
+                            WriteIndented = true,
+                            MaxDepth = 2
+                        };
+                        log.Data = JsonSerializer.Serialize(form, options);
+                    } 
+                    else
+                    {
+                        using (var reader = new StreamReader(context.HttpContext.Request.Body))
+                        {
+                            var body = reader.ReadToEndAsync().GetAwaiter().GetResult();
+                            log.Data = body;
+                        }
+                    }
                 }
             }
             catch { }
