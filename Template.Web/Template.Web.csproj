@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="client\app.tsx" />
+    <None Remove="client\components\loading-spinner\loading-spinner.tsx" />
+    <None Remove="client\index.tsx" />
+    <None Remove="client\models\defaults.ts" />
+    <None Remove="client\pages\logentry\list-logentry.tsx" />
+    <None Remove="client\serviceWorker.tsx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="3.7.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Template.Command\Template.Core.Command.csproj" />
+    <ProjectReference Include="..\Template.Query\Template.Core.Query.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="client\services\" />
+  </ItemGroup>
+
+
+
+</Project>

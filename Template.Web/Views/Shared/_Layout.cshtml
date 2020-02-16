@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="~/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="manifest" href="~/manifest.json" />
+
+    @* Change this meta-data *@
+    <title>@ViewData["Title"] - CQRS MediatR Template</title>
+    <meta name="description" content="Template ASP.NET Core application using CQRS and MediatR with React frontend" />
+
+    <link rel="apple-touch-icon" href="logo192.png" />
+    <meta name="theme-color" content="#000000" />
+    <link rel="stylesheet" href="~/bundles/css/app.css" asp-append-version="true" />
+
+</head>
+<body>
+    @RenderBody()
+
+    <script src="~/bundles/app.js" asp-append-version="true"></script>
+
+    @* Routes used for frontend *@
+    <script type="text/javascript">
+        var defaults = {
+            projectName = "CQRS MediatR Template",
+            jsonRoutes = {
+                home: '@Url.Action("Index", "Home")',
+            }
+        }
+    </script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
