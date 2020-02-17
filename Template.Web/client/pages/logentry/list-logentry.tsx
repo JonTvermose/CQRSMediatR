@@ -9,7 +9,6 @@ type ListLogEntryProps = {}
 const HeaderDiv = styled.div`
 font-size: 16px;
 font-weight: bold;
-border-bottom: 1px solid #a8a8a8;
 `;
 
 const ListDiv = styled.div`
@@ -22,6 +21,12 @@ export const ListLogEntry: FunctionComponent<ListLogEntryProps> = () => {
 
     const [isLoading, setIsLoading] = useState(false);
     const [logEntries, setLogEntries] = useState<any[]>([]);
+    const [allLogEntries, setAllLogEntries] = useState<any[]>([]);
+
+    const [searchType, setSearchType] = useState("");
+    const [searchMessage, setSearchMessage] = useState("");
+    const [searchPath, setSearchPath] = useState("");
+    const [searchTime, setSearchTime] = useState("");
 
     useEffect(() => {
         setIsLoading(true);
@@ -29,19 +34,51 @@ export const ListLogEntry: FunctionComponent<ListLogEntryProps> = () => {
             .then(res => res.json())
             .then(res => {
                 setLogEntries(res);
+                setAllLogEntries(res);
                 setIsLoading(false);
             });
     }, []);
 
+    useEffect(() => {
+        handleSearchStringChange();
+    }, [searchMessage, searchType, searchPath, searchTime]);
+
+    function handleSearchStringChange() {
+        const searchResult = allLogEntries
+            .filter(x => searchType.length === 0 || x.type.toLowerCase().includes(searchType.toLowerCase()))
+            .filter(x => searchMessage.length === 0 || x.message.toLowerCase().includes(searchMessage.toLowerCase()))
+            .filter(x => searchPath.length === 0 || x.requestPath.toLowerCase().includes(searchPath.toLowerCase()))
+            .filter(x => searchTime.length === 0 || x.timeStamp.toLowerCase().includes(searchTime.toLowerCase()));
+
+        setLogEntries(searchResult);
+    }
+
     return (
         <div>
             <h2>Log entries</h2>
+
             <div className="row">
                 <HeaderDiv className="col-3">Type</HeaderDiv>
                 <HeaderDiv className="col-3">Message</HeaderDiv>
                 <HeaderDiv className="col-3">Request Path</HeaderDiv>
                 <HeaderDiv className="col-3">Timestamp</HeaderDiv>                    
             </div>
+            <form>
+                <div className="form-group row mt-2 mb-2">
+                    <div className="col-sm-3">
+                        <input type="text" className="form-control" onChange={(e) => setSearchType(e.target.value)} placeholder="Type filter" value={searchType} />
+                    </div>
+                    <div className="col-sm-3">
+                        <input type="text" className="form-control" onChange={(e) => setSearchMessage(e.target.value)} placeholder="Message filter" value={searchMessage} />
+                    </div>
+                    <div className="col-sm-3">
+                        <input type="text" className="form-control" onChange={(e) => setSearchPath(e.target.value)} placeholder="Path filter" value={searchPath} />
+                    </div>
+                    <div className="col-sm-3">
+                        <input type="text" className="form-control" onChange={(e) => setSearchTime(e.target.value)} placeholder="Timestamp filter" value={searchTime} />
+                    </div>
+                </div>
+            </form>
             {logEntries.map((value, index) => {
                 return (<div key={index} className="row">
                     <ListDiv className="col-3">{value.type}</ListDiv>
