@@ -25,6 +25,9 @@ namespace Template.Web.Controllers
 
         public IActionResult Index()
         {
+            ViewBag.SuccessMessage = ViewData["SuccessMessage"];
+            ViewBag.ErrorMessage = ViewData["ErrorMessage"];
+            ViewBag.InfoMessage = ViewData["InfoMessage"];
             return View();
         }
 

@@ -5,3 +5,10 @@
 <noscript>You need to enable JavaScript to run this app.</noscript>
 <div id="root"></div>
 
+<script>
+    var successMessage = '@ViewBag.SuccessMessage';
+    var errorMessage = '@ViewBag.ErrorMessage';
+    var infoMessage = '@ViewBag.InfoMessage';
+    var isAuthenticated = '@Html.Raw(Json.Serialize(User.Identity.IsAuthenticated))';
+
+</script>

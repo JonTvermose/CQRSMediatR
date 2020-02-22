@@ -1,6 +1,7 @@
-﻿import * as React from 'react';
+﻿import React, { useEffect } from 'react';
 import { Route, Link, BrowserRouter as Router, Switch, Redirect } from "react-router-dom";
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './app.css';
 import './custom.scss';
 
@@ -11,11 +12,27 @@ import { Defaults } from "./models/defaults";
 import { Home } from "./pages/home";
 import { ListLogEntry } from "./pages/logentry/list-logentry";
 import { Login } from "./pages/account/login";
+import { ForgotPassword } from "./pages/account/forgot-password";
 
 declare const defaults: Defaults;
 declare const isAuthenticated: any;
+declare const successMessage: string;
+declare const errorMessage: string;
+declare const infoMessage: string;
 
 const App: React.FC = () => {
+
+    useEffect(() => {
+        if (successMessage) {
+            toast.success(successMessage);
+        }
+        if (errorMessage) {
+            toast.error(errorMessage);
+        }
+        if (infoMessage) {
+            toast.error(infoMessage);
+        }
+    }, []);
 
     return (
         <ErrorBounday>
@@ -50,13 +67,14 @@ const App: React.FC = () => {
                         <div className="App">
                             <Switch>
                                 <Route exact path="/" component={Login} />
+                                <Route exact path="/forgotpassword" component={ForgotPassword} />
                                 <Route exact path="/home" render={() => isAuthenticated === true ? <Home /> : <Redirect to="/" />} />
                                 <Route exact path="/logentries" render={() => isAuthenticated === true ? <ListLogEntry /> : <Redirect to="/" />} />
                             </Switch>
                         </div>
                     </main>
                 </div>
-                <ToastContainer />
+                <ToastContainer autoClose={8000} position={toast.POSITION.TOP_RIGHT} />
             </Router>
         </ErrorBounday>
 

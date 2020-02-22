@@ -18,4 +18,11 @@ export default class AccountService {
             });
     }
 
+    public forgotPassword(username: string): Promise<Response> {
+        return this.httpService.post(defaults.jsonRoutes["forgotPassword"],
+            {
+                userName: username
+            });
+    }
+
 }

@@ -29,6 +29,7 @@
 
                 // Account
                 login: '@Url.Action("CookieTest", "Home")',
+                forgotPassword: '',
 
                 // Log entry
                 getlogentries: '@Url.Action("GetLogEntries", "LogEntry")',
@@ -38,7 +39,6 @@
                 addMissingStringResource: '@Url.Action("AddMissingKey","StringResource")',
             },
         };
-        var isAuthenticated = '@Html.Raw(Json.Serialize(User?.Identity?.IsAuthenticated))';
     </script>
 
 

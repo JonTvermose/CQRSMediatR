@@ -11,6 +11,7 @@
     <None Remove="client\index.tsx" />
     <None Remove="client\models\defaults.ts" />
     <None Remove="client\models\user.ts" />
+    <None Remove="client\pages\account\forgot-password.tsx" />
     <None Remove="client\pages\account\login.tsx" />
     <None Remove="client\pages\home.tsx" />
     <None Remove="client\pages\logentry\list-logentry.tsx" />
@@ -38,10 +39,14 @@
   <ItemGroup>
     <ProjectReference Include="..\Template.Command\Template.Core.Command.csproj" />
     <ProjectReference Include="..\Template.Query\Template.Core.Query.csproj" />
+    <ProjectReference Include="..\Template.Utility\Template.Utility.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <TypeScriptCompile Update="client\models\user.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="client\pages\account\forgot-password.tsx">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Update="client\services\AccountService.ts">

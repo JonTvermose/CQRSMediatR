@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29728.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Template.Web", "Template.Web\Template.Web.csproj", "{0E65B8D1-5E18-46B2-8AE8-38F15163CE73}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Template.Web", "Template.Web\Template.Web.csproj", "{0E65B8D1-5E18-46B2-8AE8-38F15163CE73}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Template.Core.Query", "Template.Query\Template.Core.Query.csproj", "{4E826F7C-891B-4E20-A036-E4C361C78194}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Template.Core.Query", "Template.Query\Template.Core.Query.csproj", "{4E826F7C-891B-4E20-A036-E4C361C78194}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Template.Core.Command", "Template.Command\Template.Core.Command.csproj", "{49336794-91B9-4D41-8482-1C18C07823B0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Template.Core.Command", "Template.Command\Template.Core.Command.csproj", "{49336794-91B9-4D41-8482-1C18C07823B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Template.Infrastructure.DataAccess", "Template.Infrastructure.DataAccess\Template.Infrastructure.DataAccess.csproj", "{66119DD3-8F88-4A20-81E0-8F50A065BC80}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Template.Infrastructure.DataAccess", "Template.Infrastructure.DataAccess\Template.Infrastructure.DataAccess.csproj", "{66119DD3-8F88-4A20-81E0-8F50A065BC80}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Template.Core.Data", "Template.Core.Data\Template.Core.Data.csproj", "{A52FEB2B-F5CD-40F0-94C9-2B1336AA455E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Template.Core.Data", "Template.Core.Data\Template.Core.Data.csproj", "{A52FEB2B-F5CD-40F0-94C9-2B1336AA455E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Template.Utility", "Template.Utility\Template.Utility.csproj", "{A083857A-AA52-49F5-BD35-733241274E37}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{A52FEB2B-F5CD-40F0-94C9-2B1336AA455E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A52FEB2B-F5CD-40F0-94C9-2B1336AA455E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A52FEB2B-F5CD-40F0-94C9-2B1336AA455E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A083857A-AA52-49F5-BD35-733241274E37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A083857A-AA52-49F5-BD35-733241274E37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A083857A-AA52-49F5-BD35-733241274E37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A083857A-AA52-49F5-BD35-733241274E37}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

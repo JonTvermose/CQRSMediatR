@@ -1,0 +1,117 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700" rel="stylesheet">
+    <style>
+        body * {
+            box-sizing: border-box;
+            font-family: 'Montserrat', -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #fff;
+            color: #545454; 
+            font-size: 16px;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            color: #003049
+        }
+
+        a {
+            color: #2d96c1;
+        }
+
+        p {
+            font-size: 1rem;
+            line-height: 1.5rem;
+            margin-bottom: 1.8rem;
+        }
+
+        .container {
+            padding: 2rem;
+            max-width: 54rem;
+        }
+
+        .horizontal-rule td {
+            width: 300px;
+            margin: 0;
+            padding-top: 40px;
+            background: none;
+            border-bottom: 1px solid #ccc;
+            border-width: 0 0 1px0 0;
+        }
+
+        .btn-wrapper {
+            padding: 18px 24px;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+            a.btn {
+                display: inline-block;
+                font-weight: 600;
+                text-transform: uppercase;
+                font-size: 0.875rem;
+                line-height: .7;
+                text-decoration: none !important;
+            }
+
+        .btn,
+        .btn-wrapper {
+            background-color: #1b99c3;
+            border-color: #1b99c3;
+            color: #fff;
+        }
+
+        .logo {
+            width: 11rem;
+        }
+
+        .header {
+            margin-bottom: 3rem;
+        }
+
+        .mt-4 {
+            margin-top: 40px;
+        }
+
+        .mb-4 {
+            margin-bottom: 40px;
+        }
+
+        .footer {
+            color: #7e7e7e;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+        </header>
+        <main class="main">
+            @RenderBody()
+        </main>
+        <footer class="footer mt-4 mb-4">
+            <table class="horizontal-rule">
+                <tr>
+                    <td>&nbsp;</td>
+                </tr>
+            </table>
+        </footer>
+    </div>
+</body>
+</html>

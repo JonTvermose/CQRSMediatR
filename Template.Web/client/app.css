@@ -21,8 +21,8 @@
 
 /* BOOTSTRAP OVERRIDES */
 .btn-primary {
-    background-color: #2e86de !important;
-    border-color: #2e86de !important;
+    background-color: #2d98da !important;
+    border-color: #2d98da !important;
 }
 
     .btn-primary:hover {
@@ -32,8 +32,8 @@
 
 
 .btn-secondary {
-    background-color: #8395a7 !important;
-    border-color: #8395a7 !important;
+    background-color: #a5b1c2 !important;
+    border-color: #a5b1c2 !important;
 }
 
     .btn-secondary:hover {
@@ -43,11 +43,23 @@
 
 
 .btn-danger {
-    background-color: #ee5253 !important;
-    border-color: #ee5253 !important;
+    background-color: #fc5c65 !important;
+    border-color: #fc5c65 !important;
 }
 
     .btn-danger:hover {
         background-color: #e81819 !important;
         border-color: #e81819 !important;
     }
+
+.Toastify__toast--success {
+    background: #26de81 !important;
+}
+
+.Toastify__toast--error {
+    background: #fc5c65 !important;
+}
+
+.Toastify__toast--info {
+    background: #2d98da !important;
+}

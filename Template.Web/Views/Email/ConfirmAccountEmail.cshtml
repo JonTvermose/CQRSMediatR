@@ -1,0 +1,9 @@
+﻿@model Template.Web.Models.Account.Email.Callback
+@{
+    Layout = "~/Views/Email/_EmailLayout.cshtml";
+}
+
+Confirm your account
+<p class="mt-4 mb-4">
+    <a class="btn btn-blue" href="@Model.CallbackUrl">Confirm your account</a>
+</p>

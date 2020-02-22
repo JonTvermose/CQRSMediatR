@@ -14,9 +14,15 @@ using Template.Infrastructure.DataAccess;
 using Template.Web.Mappings;
 using MediatR;
 using Template.Core.Command;
-using Template.Core.Query;
 using Template.Web.Extensions;
 using System.Text.Json;
+using Template.Core.Data;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Template.Utility.Models;
+using Template.Core.Query.Queries.LogEntry;
 
 namespace Template.Web
 {
@@ -48,14 +54,38 @@ namespace Template.Web
             // Database
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            // Identity
+            services                
+                .AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+            services
+                .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            // Session (ViewData)
+            services.AddSession();
+            services.AddSingleton<ITempDataProvider, CookieTempDataProvider>();
+
+            // IOptions monitor
+            services.AddOptions();
+            services.Configure<SmtpSettings>(Configuration.GetSection("SmtpSettings"));
+
+            // MVC
             services.AddControllersWithViews()
                 .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase);
+
+            // Setup for load balancers/proxys and docker
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            });
 
             // Automapper
             services.AddAutoMapper(new Type[] { typeof(MappingProfile) });
 
             // MediatR
-            services.AddMediatR(typeof(InsertLogEntryCommandHandler).Assembly, typeof(QueryDb).Assembly);
+            services.AddMediatR(typeof(InsertLogEntryCommandHandler).Assembly, typeof(ListLogEntriesQuery).Assembly);
 
             // Dependency injection
             services.AddDependencyInjectionSetup();
@@ -65,6 +95,8 @@ namespace Template.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseForwardedHeaders();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -82,7 +114,10 @@ namespace Template.Web
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {
