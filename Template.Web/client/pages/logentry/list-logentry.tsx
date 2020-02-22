@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import posed from 'react-pose';
 import { LoadingSpinner } from "../../components/loading-spinner/loading-spinner";
 import LogEntryService from "../../services/LogEntryService";
+import Localizer from "../../services/LocalizerService";
 
 type ListLogEntryProps = {}
 
@@ -55,27 +56,27 @@ export const ListLogEntry: FunctionComponent<ListLogEntryProps> = () => {
 
     return (
         <div>
-            <h2>Log entries</h2>
+            <h2>{Localizer.L("Log entriess")}</h2>
 
             <div className="row">
-                <HeaderDiv className="col-3">Type</HeaderDiv>
-                <HeaderDiv className="col-3">Message</HeaderDiv>
-                <HeaderDiv className="col-3">Request Path</HeaderDiv>
-                <HeaderDiv className="col-3">Timestamp</HeaderDiv>                    
+                <HeaderDiv className="col-3">{Localizer.L("Type")}</HeaderDiv>
+                <HeaderDiv className="col-3">{Localizer.L("Message")}</HeaderDiv>
+                <HeaderDiv className="col-3">{Localizer.L("Request path")}</HeaderDiv>
+                <HeaderDiv className="col-3">{Localizer.L("Timestamp")}</HeaderDiv>                    
             </div>
             <form>
                 <div className="form-group row mt-2 mb-2">
                     <div className="col-sm-3">
-                        <input type="text" className="form-control" onChange={(e) => setSearchType(e.target.value)} placeholder="Type filter" value={searchType} />
+                        <input type="text" className="form-control" onChange={(e) => setSearchType(e.target.value)} placeholder={Localizer.L("Type filter")} value={searchType} />
                     </div>
                     <div className="col-sm-3">
-                        <input type="text" className="form-control" onChange={(e) => setSearchMessage(e.target.value)} placeholder="Message filter" value={searchMessage} />
+                        <input type="text" className="form-control" onChange={(e) => setSearchMessage(e.target.value)} placeholder={Localizer.L("Message filter")} value={searchMessage} />
                     </div>
                     <div className="col-sm-3">
-                        <input type="text" className="form-control" onChange={(e) => setSearchPath(e.target.value)} placeholder="Path filter" value={searchPath} />
+                        <input type="text" className="form-control" onChange={(e) => setSearchPath(e.target.value)} placeholder={Localizer.L("Path filter")} value={searchPath} />
                     </div>
                     <div className="col-sm-3">
-                        <input type="text" className="form-control" onChange={(e) => setSearchTime(e.target.value)} placeholder="Timestamp filter" value={searchTime} />
+                        <input type="text" className="form-control" onChange={(e) => setSearchTime(e.target.value)} placeholder={Localizer.L("Timestamp filter")} value={searchTime} />
                     </div>
                 </div>
             </form>
@@ -87,7 +88,7 @@ export const ListLogEntry: FunctionComponent<ListLogEntryProps> = () => {
                     <ListDiv className="col-3">{value.timeStamp}</ListDiv>  
                 </div>)
             })}
-            {logEntries.length === 0 && <div>No log entries found.</div>}
-            <LoadingSpinner isLoading={isLoading} loadingText="Hang on. Loading log entries." />
+            {logEntries.length === 0 && <div>{Localizer.L("No log entries found.")}</div>}
+            <LoadingSpinner isLoading={isLoading} loadingText={Localizer.L("Hang on. Loading log entries.")} />
         </div>)
 }

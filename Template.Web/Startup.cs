@@ -16,6 +16,7 @@ using MediatR;
 using Template.Core.Command;
 using Template.Core.Query;
 using Template.Web.Extensions;
+using System.Text.Json;
 
 namespace Template.Web
 {
@@ -46,9 +47,9 @@ namespace Template.Web
 
             // Database
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDbContext<LogDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews()
+                .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase);
 
             // Automapper
             services.AddAutoMapper(new Type[] { typeof(MappingProfile) });
@@ -58,6 +59,7 @@ namespace Template.Web
 
             // Dependency injection
             services.AddDependencyInjectionSetup();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

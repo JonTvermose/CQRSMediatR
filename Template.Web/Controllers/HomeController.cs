@@ -3,19 +3,24 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Template.Core.Query.Queries.StringResource;
 using Template.Web.Models;
+using Template.Web.Models.StringResourceModels;
 
 namespace Template.Web.Controllers
 {
     public class HomeController : BaseController
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IMediator _mediator;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IMediator mediator)
         {
             _logger = logger;
+            _mediator = mediator;
         }
 
         public IActionResult Index()
@@ -27,12 +32,6 @@ namespace Template.Web.Controllers
         {
             Response.Cookies.Append("authentication-cookie", "you_are_authenticated");
             return Ok(new { IsAuthenticated = true });
-        }
-
-        public IActionResult Privacy()
-        {
-            throw new ArgumentNullException(nameof(User));
-            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

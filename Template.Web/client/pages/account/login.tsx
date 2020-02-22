@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import posed from 'react-pose';
 import { LoadingSpinner } from "../../components/loading-spinner/loading-spinner";
 import AccountService from "../../services/AccountService";
+import Localizer from "../../services/LocalizerService";
+
 import { Defaults } from "../../models/defaults";
 
 declare var isAuthenticated: any;
@@ -61,26 +63,26 @@ export const Login: FunctionComponent<LoginProps> = (props: LoginProps) => {
                 <LoginDiv className="col mx-auto border rounded pt-5 pb-3 mt-5 card">
                     <h3 className="text-center mb-4">{defaults.projectName.toUpperCase()}</h3>
                     <div className="form-group ml-3 mr-3 mb-4">
-                        <label>Email</label>
+                        <label>{Localizer.L("Email")}</label>
                         <input type="email" className="form-control input-lg" onChange={(e) => setUserName(e.target.value)} value={userName} />
                     </div>
                     <div className="form-group ml-3 mr-3 mb-4">
-                        <label>Password</label>
+                        <label>{Localizer.L("Password")}</label>
                         <input type="password" className="form-control input-lg" onChange={(e) => setPassword(e.target.value)} value={password} />
                     </div>
                     {invalidUserPass &&
                         <div className="text-danger form-group ml-3 mr-3 mb-4">
-                            Login failed. Incorrect username or password.
-                            </div>}
+                            {Localizer.L("Login failed. Incorrect username or password.")}                            
+                        </div>}
                     <div className="form-group ml-3 mr-3 mb-4" onClick={() => setRememberMe(!rememberMe)}>
                         <input type="checkbox" className="mr-1" checked={rememberMe} readOnly />
-                        <label className="form-check-label">Remember me</label>
+                        <label className="form-check-label">{Localizer.L("Remember me")}</label>
                     </div>
                     <div className="text-center mb-3">
-                        <LoginButton className="btn btn-primary btn-lg" onClick={handleLoginClick}>Login</LoginButton>
+                        <LoginButton className="btn btn-primary btn-lg" onClick={handleLoginClick}>{Localizer.L("Login")}</LoginButton>
                     </div>
                     <div className="form-group text-center">
-                        <a href="#" className="text-muted"><small>Forgot password?</small></a>
+                        <a href="#" className="text-muted"><small>{Localizer.L("Forgot password?")}</small></a>
                     </div>
                 </LoginDiv>
             </div>

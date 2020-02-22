@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Template.Infrastructure.DataAccess.Migrations
 {
-    public partial class Initial : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -29,12 +29,37 @@ namespace Template.Infrastructure.DataAccess.Migrations
                 {
                     table.PrimaryKey("PK_LogEntries", x => x.Id);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "StringResources",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Key = table.Column<string>(nullable: true),
+                    Value = table.Column<string>(nullable: true),
+                    LanguageCode = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StringResources", x => x.Id);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StringResources_Key_LanguageCode",
+                table: "StringResources",
+                columns: new[] { "Key", "LanguageCode" },
+                unique: true,
+                filter: "[Key] IS NOT NULL AND [LanguageCode] IS NOT NULL");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "LogEntries");
+
+            migrationBuilder.DropTable(
+                name: "StringResources");
         }
     }
 }

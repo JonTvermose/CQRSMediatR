@@ -8,8 +8,7 @@ namespace Template.Core.Query.Queries.LogEntry
 {
     public class ListLogEntriesQuery : IRequest<IEnumerable<LogEntryListview>>
     {
-
-        public int MaxLogEntries { get; set; }
+        public int MaxLogEntries { get; }
 
         public ListLogEntriesQuery()
         {

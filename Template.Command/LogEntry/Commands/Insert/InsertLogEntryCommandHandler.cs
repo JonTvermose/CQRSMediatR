@@ -14,15 +14,15 @@ namespace Template.Core.Command
     public class InsertLogEntryCommandHandler : AsyncRequestHandler<InsertLogEntryCommand>
     {
         private readonly IMediator _mediator;
-        private readonly LogDbContext _dbContext;
+        private readonly ApplicationDbContext _dbContext;
         
-        public InsertLogEntryCommandHandler(IMediator mediator, LogDbContext dbContext)
+        public InsertLogEntryCommandHandler(IMediator mediator, ApplicationDbContext dbContext)
         {
             _mediator = mediator;
             _dbContext = dbContext;
         }
 
-        protected override Task Handle(InsertLogEntryCommand command, CancellationToken cancellationToken)
+        protected override async Task Handle(InsertLogEntryCommand command, CancellationToken cancellationToken)
         {
             var context = command.ExceptionContext;
             var log = new LogEntry
@@ -48,7 +48,7 @@ namespace Template.Core.Command
                 {
                     if (context.HttpContext.Request.HasFormContentType)
                     {
-                        var form = context.HttpContext.Request.ReadFormAsync().GetAwaiter().GetResult();
+                        var form = await context.HttpContext.Request.ReadFormAsync();
                         var options = new JsonSerializerOptions
                         {
                             WriteIndented = true,
@@ -60,7 +60,7 @@ namespace Template.Core.Command
                     {
                         using (var reader = new StreamReader(context.HttpContext.Request.Body))
                         {
-                            var body = reader.ReadToEndAsync().GetAwaiter().GetResult();
+                            var body = await reader.ReadToEndAsync();
                             log.Data = body;
                         }
                     }
@@ -68,11 +68,9 @@ namespace Template.Core.Command
             }
             catch { }
             _dbContext.LogEntries.Add(log);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
-            _mediator.Publish(new LogEntryInsertedNotification(log));
-
-            return Task.CompletedTask;
+            await _mediator.Publish(new LogEntryInsertedNotification(log));
         }
     }
 }

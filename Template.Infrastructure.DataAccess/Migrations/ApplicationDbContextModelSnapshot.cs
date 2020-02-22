@@ -3,17 +3,15 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Template.Infrastructure.DataAccess;
 
 namespace Template.Infrastructure.DataAccess.Migrations
 {
-    [DbContext(typeof(LogDbContext))]
-    [Migration("20200215200649_Initial")]
-    partial class Initial
+    [DbContext(typeof(ApplicationDbContext))]
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -64,6 +62,31 @@ namespace Template.Infrastructure.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("LogEntries");
+                });
+
+            modelBuilder.Entity("Template.Core.Data.StringResource", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Key")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("LanguageCode")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Key", "LanguageCode")
+                        .IsUnique()
+                        .HasFilter("[Key] IS NOT NULL AND [LanguageCode] IS NOT NULL");
+
+                    b.ToTable("StringResources");
                 });
 #pragma warning restore 612, 618
         }
