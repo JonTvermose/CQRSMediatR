@@ -13,7 +13,7 @@
     <link rel="apple-touch-icon" href="logo192.png" />
     <meta name="theme-color" content="#000000" />
     <link rel="stylesheet" href="~/bundles/css/app.css" asp-append-version="true" />
-
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,500,600,700&display=swap" rel="stylesheet">
 </head>
 <body>
     @RenderBody()
@@ -23,10 +23,17 @@
         var defaults = {
             projectName: 'CQRS MediatR Template',
             jsonRoutes: {
+                // Home
                 home: '@Url.Action("Index", "Home")',
+
+                // Account
+                login: '@Url.Action("CookieTest", "Home")',
+
+                // Log entry
                 getlogentries: '@Url.Action("GetLogEntries", "LogEntry")',
             },
         };
+        var isAuthenticated = '@Html.Raw(Json.Serialize(User?.Identity?.IsAuthenticated))';
     </script>
 
     <script src="~/bundles/app.js" asp-append-version="true"></script>

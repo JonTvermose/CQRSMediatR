@@ -23,6 +23,12 @@ namespace Template.Web.Controllers
             return View();
         }
 
+        public IActionResult CookieTest()
+        {
+            Response.Cookies.Append("authentication-cookie", "you_are_authenticated");
+            return Ok(new { IsAuthenticated = true });
+        }
+
         public IActionResult Privacy()
         {
             throw new ArgumentNullException(nameof(User));

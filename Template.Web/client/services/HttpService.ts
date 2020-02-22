@@ -16,7 +16,7 @@
         if (!url)
             throw new Error("HttpService.post(): Url was null or undefined");
         return fetch(url, {
-            method: 'GET',
+            method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'

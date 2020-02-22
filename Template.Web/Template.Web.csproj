@@ -10,8 +10,11 @@
     <None Remove="client\components\loading-spinner\loading-spinner.tsx" />
     <None Remove="client\index.tsx" />
     <None Remove="client\models\defaults.ts" />
+    <None Remove="client\models\user.ts" />
+    <None Remove="client\pages\account\login.tsx" />
     <None Remove="client\pages\home.tsx" />
     <None Remove="client\pages\logentry\list-logentry.tsx" />
+    <None Remove="client\services\AccountService.ts" />
     <None Remove="client\services\ErrorService.ts" />
     <None Remove="client\services\HttpService.ts" />
     <None Remove="client\services\LogEntryService.ts" />
@@ -34,6 +37,19 @@
   <ItemGroup>
     <ProjectReference Include="..\Template.Command\Template.Core.Command.csproj" />
     <ProjectReference Include="..\Template.Query\Template.Core.Query.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Update="client\models\user.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="client\services\AccountService.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\NewFolder\" />
   </ItemGroup>
 
 

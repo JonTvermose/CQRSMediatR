@@ -2,9 +2,6 @@
 import styled from 'styled-components';
 import posed from 'react-pose';
 import { LoadingSpinner } from "../components/loading-spinner/loading-spinner";
-import { Defaults } from "../models/defaults";
-
-declare const defaults: Defaults;
 
 type HomeProps = {
 

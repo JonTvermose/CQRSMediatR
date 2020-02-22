@@ -1,5 +1,5 @@
 ﻿import * as React from 'react';
-import { Route, Link, BrowserRouter as Router, Switch, useHistory } from "react-router-dom";
+import { Route, Link, BrowserRouter as Router, Switch, Redirect } from "react-router-dom";
 import { ToastContainer } from 'react-toastify';
 import './app.css';
 import './custom.scss';
@@ -10,8 +10,10 @@ import { Defaults } from "./models/defaults";
 
 import { Home } from "./pages/home";
 import { ListLogEntry } from "./pages/logentry/list-logentry";
+import { Login } from "./pages/account/login";
 
 declare const defaults: Defaults;
+declare const isAuthenticated: any;
 
 const App: React.FC = () => {
 
@@ -24,20 +26,22 @@ const App: React.FC = () => {
                             <a className="navbar-brand">
                                 {defaults.projectName}
                             </a>
-                            <button className="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                                aria-expanded="false" aria-label="Toggle navigation">
-                                <span className="navbar-toggler-icon"></span>
-                            </button>
-                            <div className="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                                <ul className="navbar-nav flex-grow-1">
-                                    <li className="nav-item">
-                                        <Link to="/" className="nav-link text-dark">Home</Link>
-                                    </li>
-                                    <li className="nav-item">
-                                        <Link to="/logentries" className="nav-link text-dark">Log entries</Link>
-                                    </li>
-                                </ul>
-                            </div>
+                            {window.location.pathname !== "/" &&
+                                <button className="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                                    aria-expanded="false" aria-label="Toggle navigation">
+                                    <span className="navbar-toggler-icon"></span>
+                                </button>}
+                            {window.location.pathname !== "/" && 
+                                <div className="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                                    <ul className="navbar-nav flex-grow-1">
+                                        <li className="nav-item">
+                                            <Link to="/" className="nav-link text-dark">Home</Link>
+                                        </li>
+                                        <li className="nav-item">
+                                            <Link to="/logentries" className="nav-link text-dark">Log entries</Link>
+                                        </li>
+                                    </ul>
+                                </div>}
                         </div>
                     </nav>
                 </header>
@@ -45,8 +49,9 @@ const App: React.FC = () => {
                     <main role="main" className="pb-3">
                         <div className="App">
                             <Switch>
-                                <Route exact path="/" component={Home} />
-                                <Route exact path="/logentries" component={ListLogEntry} />
+                                <Route exact path="/" component={Login} />
+                                <Route exact path="/home" render={() => isAuthenticated === true ? <Home /> : <Redirect to="/" />} />
+                                <Route exact path="/logentries" render={() => isAuthenticated === true ? <ListLogEntry /> : <Redirect to="/" />} />
                             </Switch>
                         </div>
                     </main>
