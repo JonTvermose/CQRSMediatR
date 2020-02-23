@@ -49,7 +49,8 @@ namespace Template.Web
                 {
                     builder.WithOrigins(Configuration.GetSection("AllowedOrigins").GetChildren().Select(x => x.Value).ToArray())
                         .AllowAnyHeader()
-                        .AllowAnyMethod();
+                        .AllowAnyMethod()
+                        .AllowCredentials();
                 });
             });
 
@@ -68,7 +69,7 @@ namespace Template.Web
             // ValidateAntiForgeryToken
             services.AddAntiforgery(options =>
             {
-                options.HeaderName = "X-XSRF-TOKEN";
+                options.HeaderName = "x-xsrf-token"; // MUST be lowercase
                 options.SuppressXFrameOptionsHeader = false;
             });
 
@@ -107,15 +108,6 @@ namespace Template.Web
         {
             app.UseForwardedHeaders();
 
-            // Antiforgery for JavaScript
-            app.Use(next => context =>
-            {
-                // The request token can be sent as a JavaScript-readable cookie, 
-                var tokens = antiforgery.GetAndStoreTokens(context);
-                context.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions() { HttpOnly = false, Secure = true });
-                return next(context);
-            });
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -137,6 +129,19 @@ namespace Template.Web
             app.UseAuthorization();
 
             app.UseSession();
+
+            // Antiforgery for JavaScript manual cookie handling (see code in client/services/HttpService.ts)
+            app.Use(next => context =>
+            {
+                var path = context.Request.Path.Value;
+                if (path == "/" || path.Contains("home/refreshtoken", StringComparison.OrdinalIgnoreCase))
+                {
+                    // The request token can be sent as a JavaScript-readable cookie, 
+                    var tokens = antiforgery.GetAndStoreTokens(context);
+                    context.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions() { HttpOnly = false });
+                }
+                return next(context);
+            });
 
             app.UseEndpoints(endpoints =>
             {

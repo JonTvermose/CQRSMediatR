@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Template.Core.Data;
 using Template.Core.Query.Queries.LogEntry.Models;
+using Template.Web.Models.Account;
 
 namespace Template.Web.Mappings
 {
@@ -20,6 +21,10 @@ namespace Template.Web.Mappings
                 .ReverseMap();
             CreateMap<LogEntry, LogEntryDetails>()
                 .ReverseMap();
+
+            CreateMap<ApplicationUser, CurrentUserViewModel>()
+                .ForMember(x => x.FullName, opts => opts.Ignore());
+            
         }
     }
 }

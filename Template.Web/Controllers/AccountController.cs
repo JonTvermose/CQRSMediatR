@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -24,18 +25,21 @@ namespace Template.Web.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SmtpMailSender _mailSender;
         private readonly ViewRenderService _viewRenderService;
+        private readonly IMapper _mapper;
 
         public AccountController(IMediator mediator, 
             SignInManager<ApplicationUser> signInManager,
             UserManager<ApplicationUser> userManager,
             SmtpMailSender mailSender,
-            ViewRenderService viewRenderService)
+            ViewRenderService viewRenderService, 
+            IMapper mapper)
         {
             _mediator = mediator;
             _signInManager = signInManager;
             _userManager = userManager;
             _mailSender = mailSender;
             _viewRenderService = viewRenderService;
+            _mapper = mapper;
         }
 
         [HttpPost]
@@ -51,8 +55,8 @@ namespace Template.Web.Controllers
                 if (result.Succeeded)
                 {
                     // _logger.LogInformation("User logged in.");
-
-                    return Ok(new LoginResult { IsAuthenticated = true });
+                    var user = await _userManager.FindByEmailAsync(model.Email);
+                    return Ok(new LoginResult { IsAuthenticated = true, CurrentUser = _mapper.Map<CurrentUserViewModel>(user) });
                 }
                 if (result.RequiresTwoFactor)
                 {
@@ -97,7 +101,7 @@ namespace Template.Web.Controllers
             if (result.Succeeded)
             {
                 // _logger.LogInformation("User with ID {UserId} logged in with 2fa.", user.Id);
-                return Ok(new LoginResult { IsAuthenticated = true });
+                return Ok(new LoginResult { IsAuthenticated = true, CurrentUser = _mapper.Map<CurrentUserViewModel>(user) });
             }
             else if (result.IsLockedOut)
             {
@@ -164,6 +168,32 @@ namespace Template.Web.Controllers
                 return Ok(new ResetPasswordResult { IsReset = true });
             }
             return Ok(new ResetPasswordResult { IsReset = false });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetProfile()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                throw new ApplicationException($"Unable to load user.");
+            }
+
+            return Ok(_mapper.Map<CurrentUserViewModel>(user));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditProfile(object viewModel) // TODO
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                throw new ApplicationException($"Unable to load user.");
+            }
+            // TODO update user via mediator
+
+            return Ok(_mapper.Map<CurrentUserViewModel>(user));
         }
 
         [HttpGet]

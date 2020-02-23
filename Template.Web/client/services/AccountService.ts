@@ -1,7 +1,10 @@
 ﻿import HttpService from "./HttpService";
 import { Defaults } from "../models/defaults";
+import { User } from "../models/user";
+
 declare const defaults: Defaults;
 declare var isAuthenticated: boolean;
+declare var currentUser: User;
 
 export default class AccountService {
     private httpService: HttpService;
@@ -14,11 +17,33 @@ export default class AccountService {
         return isAuthenticated;
     }
 
+    public getUser(): Promise<any> {
+        if (!currentUser.email) {
+            return this.httpService.get(defaults.jsonRoutes["getProfile"]).then(res => res.json()).then(res => {
+                currentUser = res;
+                return res;
+            });
+        } else {
+            return new Promise<any>((resolve) => resolve(currentUser));
+        }
+    }
+
+    public setUser(user: User): void {
+        currentUser = user;
+    }
+
     public logout(): Promise<any> {
         return this.httpService.post(defaults.jsonRoutes["logout"], {})
             .then(res => {
-                isAuthenticated = false;
+                if (res.ok) {
+                    isAuthenticated = false;
+                } else {
+                    throw new Error("Error logging user out.");
+                }
                 return res.json
+            })
+            .then(res => {
+                window.location.href = window.location.origin;
             });
     }
 
@@ -28,6 +53,15 @@ export default class AccountService {
                 Email: username,
                 Password: password,
                 RememberMe: rememberMe
+            });
+    }
+
+    public editProfile(username: string, firstName: string, lastName: string): Promise<Response> {
+        return this.httpService.post(defaults.jsonRoutes["editProfile"],
+            {
+                Email: username,
+                Firstname: firstName,
+                LastName: lastName
             });
     }
 

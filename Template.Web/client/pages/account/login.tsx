@@ -2,11 +2,14 @@
 import { useHistory } from "react-router-dom";
 import styled from 'styled-components';
 import posed from 'react-pose';
+import { toast } from 'react-toastify';
+
 import { LoadingSpinner } from "../../components/loading-spinner/loading-spinner";
 import AccountService from "../../services/AccountService";
 import Localizer from "../../services/LocalizerService";
 
 import { Defaults } from "../../models/defaults";
+import { User } from "../../models/user";
 
 declare var isAuthenticated: any;
 declare const defaults: Defaults;
@@ -42,6 +45,19 @@ export const Login: FunctionComponent<LoginProps> = (props: LoginProps) => {
     const [lockedOut, setLockedOut] = useState(false);
     const [invalid2Fa, setInvalid2Fa] = useState(false);
 
+    //useEffect(() => {
+    //    // Submit when pressing enter
+    //    const listener = event => {
+    //        if (event.code === "Enter" || event.code === "NumpadEnter") {
+    //            handleLoginClick();
+    //        }
+    //    };
+    //    document.addEventListener("keydown", listener);
+    //    return () => {
+    //        document.removeEventListener("keydown", listener);
+    //    };
+    //}, []);
+
     function handleLoginClick() {
         setIsLoading(true);
 
@@ -50,15 +66,17 @@ export const Login: FunctionComponent<LoginProps> = (props: LoginProps) => {
             .then(res => {
                 setIsLoading(false);
                 if (res.isAuthenticated) {
+                    accountService.setUser(res.currentUser);
                     setIsLoading(true);
-                    isAuthenticated = true;
-                    history.push("/home");
                     accountService.refreshToken()
                         .then(res => {
-                            console.log(res);
                             setIsLoading(false);
-                            isAuthenticated = true;
-                            history.push("/home");
+                            if (res.ok === true) {
+                                isAuthenticated = true;
+                                history.push("/home");
+                            } else {
+                                toast.error("Server Error while logging in.");
+                            }
                     });
                 } else if (res.requiresTwoFactor) {
                     setPromptTwoFactor(true);
@@ -77,6 +95,7 @@ export const Login: FunctionComponent<LoginProps> = (props: LoginProps) => {
             .then(res => {
                 setIsLoading(false);
                 if (res.isAuthenticated) {
+                    accountService.setUser(res.currentUser);
                     isAuthenticated = true;
                     history.push("/home");
                 } else if (res.isLockedOut) {

@@ -33,7 +33,7 @@ namespace Template.Web.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize]
         public async Task<IActionResult> RefreshToken()
         {
             await Task.Delay(1);

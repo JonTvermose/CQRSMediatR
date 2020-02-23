@@ -13,7 +13,7 @@
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'X-XSRF-TOKEN': cookie // Name must match that of StartUp.cs configuration
+                'x-xsrf-token': cookie // Name must match that of StartUp.cs configuration
             }
         });
     }
@@ -31,7 +31,7 @@
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'X-XSRF-TOKEN': cookie // Name must match that of StartUp.cs configuration
+                'x-xsrf-token': cookie // Name must match that of StartUp.cs configuration
             },
             body: JSON.stringify(data)
         });

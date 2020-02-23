@@ -12,5 +12,6 @@ namespace Template.Web.Models.Account
         public bool RequiresTwoFactor { get; set; }
         public bool IsInvalidAttempt { get; set; }
         public bool IsInvalid2Fa { get; set; }
+        public CurrentUserViewModel CurrentUser { get; set; }
     }
 }

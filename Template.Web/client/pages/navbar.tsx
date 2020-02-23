@@ -21,12 +21,7 @@ export const Navbar: FunctionComponent<NavbarProps> = () => {
     function handleOnLogoutClick(e) {
         e.preventDefault();
         setIsLoading(true);
-        accountService.logout()
-            .then(res => {
-                console.log(res);
-                setIsLoading(false);
-                history.push("/");
-            });
+        accountService.logout();
     }
 
     return (

@@ -14,6 +14,7 @@
     <None Remove="client\models\user.ts" />
     <None Remove="client\pages\account\forgot-password.tsx" />
     <None Remove="client\pages\account\login.tsx" />
+    <None Remove="client\pages\account\profile.tsx" />
     <None Remove="client\pages\home.tsx" />
     <None Remove="client\pages\logentry\list-logentry.tsx" />
     <None Remove="client\pages\navbar.tsx" />
