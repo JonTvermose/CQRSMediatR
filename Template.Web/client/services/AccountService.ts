@@ -1,6 +1,7 @@
 ﻿import HttpService from "./HttpService";
 import { Defaults } from "../models/defaults";
 declare const defaults: Defaults;
+declare var isAuthenticated: boolean;
 
 export default class AccountService {
     private httpService: HttpService;
@@ -8,20 +9,32 @@ export default class AccountService {
     constructor() {
         this.httpService = new HttpService();
     }
+
+    static isLoggedIn(): boolean {
+        return isAuthenticated;
+    }
     
     public login(username: string, password: string, rememberMe: boolean): Promise<Response> {
         return this.httpService.post(defaults.jsonRoutes["login"],
             {
-                userName: username,
-                password: password,
-                rememberMe: rememberMe
+                Email: username,
+                Password: password,
+                RememberMe: rememberMe
+            });
+    }
+
+    public login2Fa(code: string, rememberMe: boolean): Promise<Response> {
+        return this.httpService.post(defaults.jsonRoutes["loginWith2fa"],
+            {
+                TwoFactorCode: code,
+                RememberMe: rememberMe
             });
     }
 
     public forgotPassword(username: string): Promise<Response> {
         return this.httpService.post(defaults.jsonRoutes["forgotPassword"],
             {
-                userName: username
+                UserName: username
             });
     }
 

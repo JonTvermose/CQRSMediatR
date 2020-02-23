@@ -40,9 +40,9 @@ namespace Template.Web.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login([FromBody] LoginViewModel model)
         {
-            ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
                 // This doesn't count login failures towards account lockout
@@ -76,7 +76,8 @@ namespace Template.Web.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> LoginWith2fa(LoginWith2faViewModel model, bool rememberMe, string returnUrl = null)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> LoginWith2fa(LoginWith2faViewModel model, bool rememberMe)
         {
             if (!ModelState.IsValid)
             {
@@ -91,7 +92,7 @@ namespace Template.Web.Controllers
 
             var authenticatorCode = model.TwoFactorCode.Replace(" ", string.Empty).Replace("-", string.Empty);
 
-            var result = await _signInManager.TwoFactorAuthenticatorSignInAsync(authenticatorCode, rememberMe, model.RememberMachine);
+            var result = await _signInManager.TwoFactorAuthenticatorSignInAsync(authenticatorCode, rememberMe, model.RememberMe);
 
             if (result.Succeeded)
             {
@@ -113,6 +114,7 @@ namespace Template.Web.Controllers
 
         [HttpPost]
         [AllowAnonymous]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
         {
             if (ModelState.IsValid)
@@ -144,6 +146,7 @@ namespace Template.Web.Controllers
 
         [HttpPost]
         [AllowAnonymous]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
         {
             if (!ModelState.IsValid)
@@ -188,6 +191,7 @@ namespace Template.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
@@ -210,6 +214,7 @@ namespace Template.Web.Controllers
 
         [HttpPost]
         [AllowAnonymous]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ConfirmAccount(EmailConfirmationViewModel viewModel)
         {
             if (!ModelState.IsValid)
@@ -245,14 +250,14 @@ namespace Template.Web.Controllers
             }
         }
 
-       // [HttpPost]
+        [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> SignUp([FromQuery] SignUpViewModel viewModel)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    return BadRequest();
-            //}
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
 
             var user = await _userManager.FindByEmailAsync(viewModel.Email);
             if (user != null)
@@ -267,7 +272,7 @@ namespace Template.Web.Controllers
                 Email = viewModel.Email,
                 UserName = viewModel.Email
             };
-            var result = await _userManager.CreateAsync(user, "Test123#");
+            var result = await _userManager.CreateAsync(user, "Test123!#");
             if (result.Succeeded)
             {
                 // send email confirmation link

@@ -8,6 +8,6 @@ namespace Template.Web.Models.Account
     public class LoginWith2faViewModel
     {
         public string TwoFactorCode { get; set; }
-        public bool RememberMachine { get; set; }
+        public bool RememberMe { get; set; }
     }
 }

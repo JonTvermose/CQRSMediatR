@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using Template.Core.Query.Queries.LogEntry;
 
 namespace Template.Web.Controllers
 {
+    [Authorize]
     public class LogEntryController : BaseController
     {
         private readonly IMediator _mediator;

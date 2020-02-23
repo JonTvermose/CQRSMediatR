@@ -8,6 +8,7 @@
     <None Remove="client\app.tsx" />
     <None Remove="client\components\error-boundary\error-boundary.tsx" />
     <None Remove="client\components\loading-spinner\loading-spinner.tsx" />
+    <None Remove="client\components\private-route\private-route.tsx" />
     <None Remove="client\index.tsx" />
     <None Remove="client\models\defaults.ts" />
     <None Remove="client\models\user.ts" />
@@ -15,6 +16,7 @@
     <None Remove="client\pages\account\login.tsx" />
     <None Remove="client\pages\home.tsx" />
     <None Remove="client\pages\logentry\list-logentry.tsx" />
+    <None Remove="client\pages\navbar.tsx" />
     <None Remove="client\services\AccountService.ts" />
     <None Remove="client\services\ErrorService.ts" />
     <None Remove="client\services\HttpService.ts" />
@@ -26,6 +28,7 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

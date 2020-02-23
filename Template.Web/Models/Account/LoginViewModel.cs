@@ -7,8 +7,8 @@ namespace Template.Web.Models.Account
 {
     public class LoginViewModel
     {
-        public string Email { get; internal set; }
-        public string Password { get; internal set; }
-        public bool RememberMe { get; internal set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
+        public bool RememberMe { get; set; }
     }
 }

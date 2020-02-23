@@ -9,6 +9,6 @@
     var successMessage = '@ViewBag.SuccessMessage';
     var errorMessage = '@ViewBag.ErrorMessage';
     var infoMessage = '@ViewBag.InfoMessage';
-    var isAuthenticated = '@Html.Raw(Json.Serialize(User.Identity.IsAuthenticated))';
+    var isAuthenticated = ('@Html.Raw(User.Identity.IsAuthenticated)' == "True");
 
 </script>
