@@ -50,8 +50,16 @@ export const Login: FunctionComponent<LoginProps> = (props: LoginProps) => {
             .then(res => {
                 setIsLoading(false);
                 if (res.isAuthenticated) {
+                    setIsLoading(true);
                     isAuthenticated = true;
                     history.push("/home");
+                    accountService.refreshToken()
+                        .then(res => {
+                            console.log(res);
+                            setIsLoading(false);
+                            isAuthenticated = true;
+                            history.push("/home");
+                    });
                 } else if (res.requiresTwoFactor) {
                     setPromptTwoFactor(true);
                 } else if (res.isInvalidAttempt) {

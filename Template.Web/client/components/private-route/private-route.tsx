@@ -2,9 +2,11 @@
 import AccountService from '../../services/AccountService'
 import { Redirect, Route } from 'react-router-dom'
 import { Navbar } from "../../pages/navbar";
+import HttpService from '../../services/HttpService';
 
 export const PrivateRoute: FunctionComponent<any> = ({ component: Component, ...rest }) => {
-    const isLoggedIn = AccountService.isLoggedIn()
+    const accountService = new AccountService();
+    const isLoggedIn = accountService.isLoggedIn()
 
     return (<Route {...rest} render={() => isLoggedIn ? (<PrivateRouteWithNavbar component={Component}/>) : <Redirect to="/" />} />)
 }

@@ -57,7 +57,7 @@ namespace Template.Web
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             // Identity
-            services                
+            services
                 .AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
@@ -66,7 +66,11 @@ namespace Template.Web
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme);
 
             // ValidateAntiForgeryToken
-            services.AddAntiforgery(options => options.HeaderName = "XSRF-TOKEN");
+            services.AddAntiforgery(options =>
+            {
+                options.HeaderName = "X-XSRF-TOKEN";
+                options.SuppressXFrameOptionsHeader = false;
+            });
 
             // Session (ViewData)
             services.AddSession();
@@ -106,18 +110,9 @@ namespace Template.Web
             // Antiforgery for JavaScript
             app.Use(next => context =>
             {
-                string path = context.Request.Path.Value;
-
-                if (
-                    string.Equals(path, "/", StringComparison.OrdinalIgnoreCase) ||
-                    string.Equals(path, "/index.html", StringComparison.OrdinalIgnoreCase))
-                {
-                    // The request token can be sent as a JavaScript-readable cookie, 
-                    var tokens = antiforgery.GetAndStoreTokens(context);
-                    context.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken,
-                        new CookieOptions() { HttpOnly = false });
-                }
-
+                // The request token can be sent as a JavaScript-readable cookie, 
+                var tokens = antiforgery.GetAndStoreTokens(context);
+                context.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions() { HttpOnly = false, Secure = true });
                 return next(context);
             });
 

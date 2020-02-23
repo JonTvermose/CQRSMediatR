@@ -3,11 +3,17 @@
     public get(url: string): Promise<Response> {
         if (!url)
             throw new Error("HttpService.get(): Url was null or undefined");
+
+        let cookie = this.getCookie('XSRF-TOKEN'); // Name must match that of StartUp.cs middleware
+        if (!cookie)
+            throw new Error("HttpService.post(): XSRF-TOKEN was null or undefined");
+
         return fetch(url, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'X-XSRF-TOKEN': cookie // Name must match that of StartUp.cs configuration
             }
         });
     }
@@ -16,7 +22,7 @@
         if (!url)
             throw new Error("HttpService.post(): Url was null or undefined");
 
-        let cookie = this.getCookie('XSRF-TOKEN'); // Name must match that of StartUp.cs
+        let cookie = this.getCookie('XSRF-TOKEN'); // Name must match that of StartUp.cs middleware
         if (!cookie)
             throw new Error("HttpService.post(): XSRF-TOKEN was null or undefined");
 
@@ -25,7 +31,7 @@
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'XSRF-TOKEN': cookie // Name must match that of StartUp.cs
+                'X-XSRF-TOKEN': cookie // Name must match that of StartUp.cs configuration
             },
             body: JSON.stringify(data)
         });

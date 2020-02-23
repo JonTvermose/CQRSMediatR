@@ -26,10 +26,16 @@
             jsonRoutes: {
                 // Home
                 home: '@Url.Action("Index", "Home")',
+                refreshToken: '@Url.Action("RefreshToken", "Home")',
 
                 // Account
                 login: '@Url.Action("Login", "Account")',
-                forgotPassword: '',
+                forgotPassword: '@Url.Action("ForgotPassword", "Account")',
+                logout: '@Url.Action("Logout", "Account")',
+                loginWith2fa: '@Url.Action("LoginWith2fa", "Account")',
+                resetPassword: '@Url.Action("ResetPassword", "Account")',
+                confirmEmail: '@Url.Action("ConfirmEmail", "Account")',
+                signUp: '@Url.Action("SignUp", "Account")',                
 
                 // Log entry
                 getlogentries: '@Url.Action("GetLogEntries", "LogEntry")',

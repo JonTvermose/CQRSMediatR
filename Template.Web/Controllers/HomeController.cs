@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Template.Core.Query.Queries.StringResource;
@@ -29,6 +30,15 @@ namespace Template.Web.Controllers
             ViewBag.ErrorMessage = ViewData["ErrorMessage"];
             ViewBag.InfoMessage = ViewData["InfoMessage"];
             return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> RefreshToken()
+        {
+            await Task.Delay(1);
+            return Ok();
+
         }
 
         public IActionResult CookieTest()

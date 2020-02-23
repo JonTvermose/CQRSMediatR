@@ -10,10 +10,18 @@ export default class AccountService {
         this.httpService = new HttpService();
     }
 
-    static isLoggedIn(): boolean {
+    public isLoggedIn(): boolean {
         return isAuthenticated;
     }
-    
+
+    public logout(): Promise<any> {
+        return this.httpService.post(defaults.jsonRoutes["logout"], {})
+            .then(res => {
+                isAuthenticated = false;
+                return res.json
+            });
+    }
+
     public login(username: string, password: string, rememberMe: boolean): Promise<Response> {
         return this.httpService.post(defaults.jsonRoutes["login"],
             {
@@ -36,6 +44,10 @@ export default class AccountService {
             {
                 UserName: username
             });
+    }
+
+    public refreshToken(): Promise<Response> {
+        return this.httpService.post(defaults.jsonRoutes["refreshToken"], {});
     }
 
 }

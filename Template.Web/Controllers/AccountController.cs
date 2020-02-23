@@ -196,7 +196,7 @@ namespace Template.Web.Controllers
         {
             await _signInManager.SignOutAsync();
             // _logger.LogInformation("User logged out.");
-            return Ok();
+            return Ok(new LoginResult { IsAuthenticated = false });
         }
 
         [HttpGet]
@@ -250,9 +250,10 @@ namespace Template.Web.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> SignUp([FromQuery] SignUpViewModel viewModel)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SignUp([FromBody] SignUpViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
