@@ -10,6 +10,7 @@ namespace Template.Web.Models.Account
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
+        public bool TwoFactorEnabled { get; set; }
         public string FullName => $"{FirstName} {LastName}";
     }
 }

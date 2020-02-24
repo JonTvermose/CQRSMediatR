@@ -41,10 +41,10 @@ const App: React.FC = () => {
                         <Route exact path="/forgotpassword" component={ForgotPassword} />
                         <PrivateRoute exact path="/home" component={Home} />
                         <PrivateRoute exact path="/logentries" component={ListLogEntry} />
-                        <PrivateRoute exact path="/profile" component={Profile} />
+                        <PrivateRoute pattern="/profile" component={Profile} />
 
                     </Switch>
-                    <ToastContainer autoClose={8000} position={toast.POSITION.TOP_RIGHT} />
+                    <ToastContainer autoClose={8000} position={toast.POSITION.BOTTOM_CENTER} />
                 </Router>
             </ErrorBounday>
         </div>

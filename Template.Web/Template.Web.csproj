@@ -12,9 +12,12 @@
     <None Remove="client\index.tsx" />
     <None Remove="client\models\defaults.ts" />
     <None Remove="client\models\user.ts" />
+    <None Remove="client\pages\account\change-password.tsx" />
+    <None Remove="client\pages\account\edit-profile.tsx" />
     <None Remove="client\pages\account\forgot-password.tsx" />
     <None Remove="client\pages\account\login.tsx" />
     <None Remove="client\pages\account\profile.tsx" />
+    <None Remove="client\pages\account\two-factor.tsx" />
     <None Remove="client\pages\home.tsx" />
     <None Remove="client\pages\logentry\list-logentry.tsx" />
     <None Remove="client\pages\navbar.tsx" />
@@ -50,7 +53,16 @@
     <TypeScriptCompile Update="client\models\user.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Update="client\pages\account\change-password.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="client\pages\account\edit-profile.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Update="client\pages\account\forgot-password.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="client\pages\account\two-factor.tsx">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Update="client\services\AccountService.ts">

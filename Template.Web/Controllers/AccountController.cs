@@ -171,6 +171,27 @@ namespace Template.Web.Controllers
             return Ok(new ResetPasswordResult { IsReset = false });
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null || !user.Email.Equals(model.Email, StringComparison.OrdinalIgnoreCase))
+            {
+                return Ok(new ChangePasswordResult { HasChanged = false });
+            }
+            var result = await _userManager.ChangePasswordAsync(user, model.Password, model.NewPassword);
+            if (result.Succeeded)
+            {
+                return Ok(new ChangePasswordResult { HasChanged = true });
+            }
+            return Ok(new ChangePasswordResult { HasChanged = false });
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetProfile()
         {

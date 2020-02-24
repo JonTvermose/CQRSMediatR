@@ -54,6 +54,15 @@ export default class AccountService {
                 Password: password,
                 RememberMe: rememberMe
             });
+    } 
+
+    public changePassword(password: string, newPassword: string, email: string): Promise<Response> {
+        return this.httpService.post(defaults.jsonRoutes["changePassword"],
+            {
+                Password: password,
+                NewPassword: newPassword,
+                Email: email
+            });
     }
 
     public editProfile(username: string, firstName: string, lastName: string): Promise<Response> {

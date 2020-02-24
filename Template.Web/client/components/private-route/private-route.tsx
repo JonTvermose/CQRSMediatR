@@ -4,24 +4,34 @@ import { Redirect, Route } from 'react-router-dom'
 import { Navbar } from "../../pages/navbar";
 import HttpService from '../../services/HttpService';
 
-export const PrivateRoute: FunctionComponent<any> = ({ component: Component, ...rest }) => {
-    const accountService = new AccountService();
-    const isLoggedIn = accountService.isLoggedIn()
-
-    return (<Route {...rest} render={() => isLoggedIn ? (<PrivateRouteWithNavbar component={Component}/>) : <Redirect to="/" />} />)
+interface PrivateRouteProps {
+    component: any;
+    hideNavbar?: boolean;
 }
 
-const PrivateRouteWithNavbar: FunctionComponent<any> = ({ component: Component}) => {
+export const PrivateRoute: FunctionComponent<any> = ({ component: Component, boolean: hideNavbar, ...rest }) => {
+    const accountService = new AccountService();
+    const isLoggedIn = accountService.isLoggedIn()
+    return (<Route {...rest} render={() => isLoggedIn ? (<PrivateRouteRender component={Component} hideNavbar={rest.hideNavbar} />) : <Redirect to="/" />} />)
+}
+
+const PrivateRouteRender: FunctionComponent<PrivateRouteProps> = ({ component: Component, hideNavbar }) => {
     return (
         <div>
-            <Navbar />
-            <div className="container">
-                <main role="main" className="pb-3">
-                    <div className="App">
-                        <Component />
+            {!hideNavbar &&
+                <div>
+                    <Navbar />
+                    <div className="container">
+                        <main role="main" className="pb-3">
+                            <div className="App">
+                                <Component />
+                            </div>
+                        </main>
                     </div>
-                </main>
-            </div>
+                </div>}
+            {hideNavbar &&
+                <Component />
+            }
         </div>
     )
 }

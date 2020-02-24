@@ -34,7 +34,7 @@ color: black;
 export const LoadingSpinner: FunctionComponent<LoadingProps> = (props) => {
 
     return (
-        <PosedDiv style={{ position: "absolute", top: 0, left: 0, width: "100vw", height: "100vh", zIndex: 9, backgroundColor: "rgba(0,0,0,0.25)" }} pose={props.isLoading ? "visible" : "hidden"}>
+        <PosedDiv style={{ position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", zIndex: 9, backgroundColor: "rgba(0,0,0,0.25)" }} pose={props.isLoading ? "visible" : "hidden"}>
             <TextDiv>{props.loadingText}</TextDiv>
             <PulseLoader css={override} loading={props.isLoading} />
         </PosedDiv>)
