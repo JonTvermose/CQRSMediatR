@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Template.Core.Command;
 using Template.Core.Data;
 using Template.Utility.Email.Services;
 using Template.Utility.Services;
@@ -184,14 +185,19 @@ namespace Template.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditProfile(object viewModel) // TODO
+        public async Task<IActionResult> EditProfile([FromBody] UpdateApplicationUserModel inputModel) 
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
                 throw new ApplicationException($"Unable to load user.");
             }
-            // TODO update user via mediator
+            if(!user.Email.Equals(inputModel.Email, StringComparison.OrdinalIgnoreCase))
+            {
+                throw new ApplicationException($"Invalid email updating profile {user.Email} != {inputModel.Email}");
+            }
+            await _mediator.Send(new UpdateApplicationUserCommand(inputModel));
+            user = await _userManager.GetUserAsync(User);
 
             return Ok(_mapper.Map<CurrentUserViewModel>(user));
         }

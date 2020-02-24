@@ -60,7 +60,7 @@ export default class AccountService {
         return this.httpService.post(defaults.jsonRoutes["editProfile"],
             {
                 Email: username,
-                Firstname: firstName,
+                FirstName: firstName,
                 LastName: lastName
             });
     }

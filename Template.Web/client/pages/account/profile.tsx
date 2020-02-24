@@ -33,7 +33,8 @@ export const Profile: FunctionComponent<ProfileProps> = () => {
         });
     }, []);
 
-    function handleSaveClick() {
+    function handleSaveClick(e) {
+        e.preventDefault();
         setIsLoading(true);
         accountService.editProfile(email, firstName, lastName)
             .then(res => res.json())
