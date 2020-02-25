@@ -56,6 +56,14 @@ export default class AccountService {
             });
     } 
 
+    public resetAuthenticator(): Promise<Response> {
+        currentUser.email = "";
+        return this.httpService.post(defaults.jsonRoutes["resetAuthenticator"],
+            {
+            });
+    }
+    
+
     public changePassword(password: string, newPassword: string, email: string): Promise<Response> {
         return this.httpService.post(defaults.jsonRoutes["changePassword"],
             {
@@ -65,7 +73,20 @@ export default class AccountService {
             });
     }
 
+    public getAuthenticatorUrl(): Promise<Response> {
+        return this.httpService.get(defaults.jsonRoutes["enableAuthenticator"]);
+    }
+
+    public enableAuthenticator(code: string): Promise<Response> {
+        currentUser.email = "";
+        return this.httpService.post(defaults.jsonRoutes["enableAuthenticator"],
+            {
+                Code: code
+            });
+    }
+
     public editProfile(username: string, firstName: string, lastName: string): Promise<Response> {
+        currentUser.email = "";
         return this.httpService.post(defaults.jsonRoutes["editProfile"],
             {
                 Email: username,

@@ -55,7 +55,7 @@ export const EditProfile: FunctionComponent<EditProfileProps> = () => {
                 </div>
                 <div className="form-group mb-4">
                     <label>{Localizer.L("Email")}</label>
-                    <label className="form-control input-lg">{email}</label>
+                    <input type="text" className="form-control" readOnly value={email} />
                 </div>
                 <div className="text-right mb-3 mr-3">
                     <button type="submit" className="btn btn-primary btn-lg" onClick={handleSaveClick}>{Localizer.L("Save")}</button>

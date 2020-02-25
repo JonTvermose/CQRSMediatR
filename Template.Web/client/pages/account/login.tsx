@@ -98,8 +98,17 @@ export const Login: FunctionComponent<LoginProps> = (props: LoginProps) => {
                 setIsLoading(false);
                 if (res.isAuthenticated) {
                     accountService.setUser(res.currentUser);
-                    isAuthenticated = true;
-                    history.push("/home");
+                    setIsLoading(true);
+                    accountService.refreshToken()
+                        .then(res => {
+                            setIsLoading(false);
+                            if (res.ok === true) {
+                                isAuthenticated = true;
+                                history.push("/home");
+                            } else {
+                                toast.error("Server Error while logging in.");
+                            }
+                        });
                 } else if (res.isLockedOut) {
                     setLockedOut(true);
                 } else if (res.isInvalid2Fa) {
@@ -120,7 +129,7 @@ export const Login: FunctionComponent<LoginProps> = (props: LoginProps) => {
                     {promptTwoFactor && <div>
                         <form onSubmit={handle2faLoginClick}>
                             <div className="form-group ml-3 mr-3 mb-4">
-                                <label>{Localizer.L("Two factor code")}</label>
+                                <label>{Localizer.L("Two-factor code")}</label>
                                 <input type="text" className="form-control input-lg" onChange={(e) => setTwoFactor(e.target.value)} value={twoFactor} />
                             </div>
                             {invalid2Fa &&

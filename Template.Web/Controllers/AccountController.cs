@@ -8,10 +8,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using Template.Core.Command;
 using Template.Core.Data;
 using Template.Utility.Email.Services;
 using Template.Utility.Services;
+using Template.Web.Extensions;
 using Template.Web.Identity;
 using Template.Web.Models.Account;
 using Template.Web.Models.Account.Email;
@@ -82,11 +84,11 @@ namespace Template.Web.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> LoginWith2fa(LoginWith2faViewModel model, bool rememberMe)
+        public async Task<IActionResult> LoginWith2fa([FromBody] LoginWith2faViewModel model, bool rememberMe)
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return Ok(new LoginResult());
             }
 
             var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
@@ -96,9 +98,7 @@ namespace Template.Web.Controllers
             }
 
             var authenticatorCode = model.TwoFactorCode.Replace(" ", string.Empty).Replace("-", string.Empty);
-
             var result = await _signInManager.TwoFactorAuthenticatorSignInAsync(authenticatorCode, rememberMe, model.RememberMe);
-
             if (result.Succeeded)
             {
                 // _logger.LogInformation("User with ID {UserId} logged in with 2fa.", user.Id);
@@ -117,6 +117,79 @@ namespace Template.Web.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<IActionResult> EnableAuthenticator()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            var key = await _userManager.GetAuthenticatorKeyAsync(user);
+            if (string.IsNullOrEmpty(key))
+            {
+                await _userManager.ResetAuthenticatorKeyAsync(user);
+                key = await _userManager.GetAuthenticatorKeyAsync(user);
+            }
+            var formattedKey = string.Join(' ', key.Chunks(4).ToArray());
+            return Ok(new EnableAuthenticatorViewModel
+            {
+                SharedKey = formattedKey,
+                AuthenticatorUri = GenerateQrCodeUri(user.Email, key)
+            });
+        }
+
+        private const string AuthenicatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
+
+        private string GenerateQrCodeUri(string email, string unformattedKey)
+        {
+            return string.Format(AuthenicatorUriFormat, HttpUtility.UrlEncode(Constants.PROJECT_NAME), HttpUtility.UrlEncode(email), unformattedKey);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EnableAuthenticator([FromBody] EnableTwoFactorViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Ok(new EnableTwoFactorResult { Success = false });
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            var verificationCode = model.Code.Replace(" ", string.Empty).Replace("-", string.Empty);
+            var is2faTokenValid = await _userManager.VerifyTwoFactorTokenAsync(user, _userManager.Options.Tokens.AuthenticatorTokenProvider, verificationCode);
+            if (!is2faTokenValid)
+            {
+                return Ok(new EnableTwoFactorResult{ Success = false }); 
+            }
+
+            await _userManager.SetTwoFactorEnabledAsync(user, true);
+            var recoveryCodes = (await _userManager.GenerateNewTwoFactorRecoveryCodesAsync(user, 10)).ToList();
+
+            return Ok(new EnableTwoFactorResult { Success = true, RecoveryCodes = recoveryCodes});
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResetAuthenticator()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            await _userManager.SetTwoFactorEnabledAsync(user, false);
+            await _userManager.ResetAuthenticatorKeyAsync(user);
+            return Ok();
+        }
+
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -127,7 +200,6 @@ namespace Template.Web.Controllers
                 var user = await _userManager.FindByEmailAsync(model.Email);
                 if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
                 {
-                    // Don't reveal that the user does not exist or is not confirmed
                     return Ok(new ForgotPasswordResult { EmailSend = false });
                 }
 
@@ -141,11 +213,9 @@ namespace Template.Web.Controllers
                 model.CallbackUrl = callbackUrl;
                 var mailHtml = await _viewRenderService.RenderMailHtml("ForgotPassword", model);
                 _mailSender.SendEmail(model.Email, "Reset your password", mailHtml);
-
                 return Ok(new ForgotPasswordResult { EmailSend = true });
             }
 
-            // If we got this far, something failed, redisplay form
             return Ok(new ForgotPasswordResult { EmailSend = false });
         }
 

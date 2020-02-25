@@ -3,6 +3,7 @@ import { Defaults } from "../models/defaults";
 
 declare const defaults: Defaults;
 declare var stringResources: any;
+declare var addedKeys: string[];
 
 class Localizer {
     static httpService: HttpService = new HttpService();
@@ -37,7 +38,11 @@ class Localizer {
     }
     
     static addMissing(key: string): Promise<void> {
-        console.log("Adding key: " + key);
+        if (addedKeys.includes(key)) {
+            return;
+        }
+        addedKeys.push(key);
+        console.log("Adding missing key: " + key);
         return Localizer.httpService.post(defaults.jsonRoutes["addMissingStringResource"],
             {
                 key: key

@@ -7,7 +7,7 @@
     <link rel="manifest" href="~/manifest.json" />
 
     @* Change this meta-data *@
-    <title>@ViewData["Title"] - CQRS MediatR Template</title>
+    <title>@ViewData["Title"] - @Constants.PROJECT_NAME</title>
     <meta name="description" content="Template ASP.NET Core application using CQRS and MediatR with React frontend" />
 
     <link rel="apple-touch-icon" href="logo192.png" />
@@ -21,8 +21,12 @@
 
     @* Routes used for frontend *@
     <script>
+        // Used by the localizer to avoid adding duplicate keys in the same session
+        var addedKeys = [""]; 
+
+        // Default variables including all routes used by HttpService.ts
         var defaults = {
-            projectName: 'CQRS MediatR Template',
+            projectName: '@Constants.PROJECT_NAME',
             jsonRoutes: {
                 // Home
                 home: '@Url.Action("Index", "Home")',
@@ -39,6 +43,8 @@
                 getProfile: '@Url.Action("GetProfile", "Account")',
                 editProfile: '@Url.Action("EditProfile", "Account")',
                 changePassword: '@Url.Action("ChangePassword", "Account")',
+                enableAuthenticator: '@Url.Action("EnableAuthenticator", "Account")',
+                resetAuthenticator: '@Url.Action("ResetAuthenticator", "Account")',
 
                 // Log entry
                 getlogentries: '@Url.Action("GetLogEntries", "LogEntry")',
