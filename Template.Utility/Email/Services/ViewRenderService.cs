@@ -7,9 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Routing;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Template.Utility.Email.Services
@@ -41,8 +39,7 @@ namespace Template.Utility.Email.Services
 
             using (var sw = new StringWriter())
             {
-                var viewResult = //_razorViewEngine.FindView(actionContext, viewName, false);
-                _razorViewEngine.GetView(executingFilePath: viewPath, viewPath: viewPath, isMainPage: false);
+                var viewResult = _razorViewEngine.GetView(executingFilePath: null, viewPath: viewPath, isMainPage: false);
 
                 if (viewResult.View == null)
                 {

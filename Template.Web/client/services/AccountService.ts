@@ -45,6 +45,15 @@ export default class AccountService {
             .then(res => {
                 window.location.href = window.location.origin;
             });
+    }    
+
+    public confirmAccount(userid: string, code: string, password: string): Promise<Response> {
+        return this.httpService.post(defaults.jsonRoutes["confirmAccount"],
+            {
+                UserId: userid,
+                Code: code,
+                Password: password
+            });
     }
 
     public signUp(username: string, firstName: string, lastName: string): Promise<Response> {

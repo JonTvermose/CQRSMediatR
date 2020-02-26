@@ -17,6 +17,8 @@ using Template.Web.Extensions;
 using Template.Web.Identity;
 using Template.Web.Models.Account;
 using Template.Web.Models.Account.Email;
+using Template.Web.Models.Account.Results;
+using Template.Web.Models.Email;
 
 namespace Template.Web.Controllers
 {
@@ -212,7 +214,7 @@ namespace Template.Web.Controllers
 
                 model.CallbackUrl = callbackUrl;
                 var mailHtml = await _viewRenderService.RenderMailHtml("ForgotPassword", model);
-                _mailSender.SendEmail(model.Email, "Reset your password", mailHtml);
+                _mailSender.SendEmail(model.Email, $"{user.FirstName} {user.LastName}", "Reset your password", mailHtml);
                 return Ok(new ForgotPasswordResult { EmailSend = true });
             }
 
@@ -326,54 +328,36 @@ namespace Template.Web.Controllers
             return Ok(new LoginResult { IsAuthenticated = false });
         }
 
-        [HttpGet]
-        [AllowAnonymous]
-        public async Task<IActionResult> ConfirmAccount(string userId, string code)
-        {
-            if (userId == null || code == null)
-            {
-                return View("Error");
-
-            }
-            var user = await _userManager.FindByIdAsync(userId);
-            return View(new EmailConfirmationViewModel() { Code = code, UserId = userId, Email = user.Email });
-        }
-
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ConfirmAccount(EmailConfirmationViewModel viewModel)
+        public async Task<IActionResult> ConfirmAccount([FromBody] EmailConfirmationViewModel viewModel)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid || viewModel.UserId == null || viewModel.Code == null)
             {
-                return BadRequest();
+                return Ok(new ConfirmAccountResult { BadRequest = true });
             }
 
-            if (viewModel.UserId == null || viewModel.Code == null)
-            {
-                return View("Error");
-            }
             var user = await _userManager.FindByIdAsync(viewModel.UserId);
             if (user == null)
             {
-                return View("Error");
+                return Ok(new ConfirmAccountResult { BadRequest = true });
             }
-
-            var result = await _userManager.ConfirmEmailAsync(user, viewModel.Code);
+            var decodedUrl = HttpUtility.UrlDecode(viewModel.Code).Replace(' ', '+');
+            var result = await _userManager.ConfirmEmailAsync(user, decodedUrl);
             if (result.Succeeded)
             {
                 var res = await _userManager.AddPasswordAsync(user, viewModel.Password);
                 if (!res.Succeeded)
                 {
-                    return View("ConfirmAccount", viewModel); // TODO
+                    return Ok(new ConfirmAccountResult { InvalidPassword = true });
                 }
 
-                return View("AccountConfirmed", viewModel); // TODO
+                return Ok(new ConfirmAccountResult { Success = true });
             }
             else
             {
-                // throw error
-                return View("ConfirmAccount", viewModel); // TODO
+                return Ok(new ConfirmAccountResult());
             }
         }
 
@@ -403,9 +387,8 @@ namespace Template.Web.Controllers
                     "Account", 
                     new EmailConfirmationViewModel { UserId = user.Id, Code = code }, 
                     Request.Scheme);
-                var view = Path.Combine(Directory.GetCurrentDirectory(), "Views/Email/ConfirmAccountEmail.cshtml");
-                var mailHtml = await _viewRenderService.RenderMailHtml(view, new Callback(confirmUrl));
-                _mailSender.SendEmail(viewModel.Email, "Confirm your account", mailHtml);
+                var mailHtml = await _viewRenderService.RenderMailHtml("/Views/Email/ConfirmAccountEmail.cshtml", new ConfirmAccountEmailViewModel { Url = confirmUrl });
+                _mailSender.SendEmail(viewModel.Email, $"{user.FirstName} {user.LastName}", "Confirm your account", mailHtml);
                 return Ok(new SignUpResult { Success = true });
             }
             else

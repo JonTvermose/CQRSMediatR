@@ -69,7 +69,7 @@ export const ChangePassword: FunctionComponent<ChangePasswordProps> = () => {
                     <input type="password" className="form-control input-lg" onChange={(e) => setConfirmPassword(e.target.value)} value={confirmPassword} />
                 </div>
                 <div className="text-right mb-3 mr-3">
-                    <button type="submit" className="btn btn-primary btn-lg" onClick={handleSaveClick}>{Localizer.L("Save")}</button>
+                    <button type="submit" className="btn btn-primary btn-lg">{Localizer.L("Save")}</button>
                 </div>
             </form>
             <LoadingSpinner isLoading={isLoading} />

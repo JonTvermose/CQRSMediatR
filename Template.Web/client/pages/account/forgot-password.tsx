@@ -49,6 +49,11 @@ export const ForgotPassword: FunctionComponent<ForgotPasswordProps> = (props: Fo
             });
     }
 
+    function handleOnLoginClick(e) {
+        e.preventDefault();
+        history.push("/");
+    }
+
     return (
         <div className="container">
             <div className="row">
@@ -73,7 +78,7 @@ export const ForgotPassword: FunctionComponent<ForgotPasswordProps> = (props: Fo
                             {Localizer.L("An email was send to you with a password reset link.")}
                         </div>}
                     <div className="form-group text-center">
-                        <a href="#" className="text-muted" onClick={() => history.push("/")}><small>{Localizer.L("Go to Login")}</small></a>
+                        <a href="" className="text-muted" onClick={handleOnLoginClick}><small>{Localizer.L("Go to Login")}</small></a>
                     </div>
                 </LoginDiv>
             </div>

@@ -27,11 +27,11 @@ namespace Template.Utility.Services
             _smtpSettings = smtpSettingOptions.CurrentValue;
         }
 
-        public void SendEmail(string recipientEmail, string subject, string messageBody)
+        public void SendEmail(string recipientEmail, string recipientName, string subject, string messageBody)
         {
             using (var mail = new MailMessage(
               from: new MailAddress(_smtpSettings.FromEmail, _smtpSettings.FromDisplayName),
-              to: new MailAddress(recipientEmail, recipientEmail)
+              to: new MailAddress(recipientEmail, recipientName ?? recipientEmail)
               ))
             {
                 var client = new SmtpClient(_smtpSettings.Server, _smtpSettings.Port);

@@ -13,6 +13,8 @@ import { ListLogEntry } from "./pages/logentry/list-logentry";
 import { Login } from "./pages/account/login";
 import { ForgotPassword } from "./pages/account/forgot-password";
 import { Profile } from "./pages/account/profile";
+import { ConfirmAccount } from "./pages/account/confirm-account";
+
 
 declare const successMessage: string;
 declare const errorMessage: string;
@@ -39,6 +41,8 @@ const App: React.FC = () => {
                     <Switch>
                         <Route exact path="/" component={Login} />
                         <Route exact path="/forgotpassword" component={ForgotPassword} />
+                        <Route pattern="/account/confirmaccount" component={ConfirmAccount} />
+
                         <PrivateRoute exact path="/home" component={Home} />
                         <PrivateRoute exact path="/logentries" component={ListLogEntry} />
                         <PrivateRoute pattern="/profile" component={Profile} />

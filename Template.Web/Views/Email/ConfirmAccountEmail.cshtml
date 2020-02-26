@@ -1,9 +1,19 @@
-﻿@model Template.Web.Models.Account.Email.Callback
+﻿@using Template.Web.Models.Email
+@model ConfirmAccountEmailViewModel
 @{
-    Layout = "~/Views/Email/_EmailLayout.cshtml";
+    Layout = "_EmailLayout";
 }
 
-Confirm your account
-<p class="mt-4 mb-4">
-    <a class="btn btn-blue" href="@Model.CallbackUrl">Confirm your account</a>
+@{
+    ViewData["EmailTitle"] = "Welcome!";
+}
+
+<p>
+    We're excited to have you get started. First, you need to confirm your account and create a password. Just press the button below.
 </p>
+
+<br />
+
+@await Html.PartialAsync("EmailButton", new EmailButtonViewModel("Confirm Account", Model.Url))
+
+<br />
