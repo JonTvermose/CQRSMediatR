@@ -382,16 +382,10 @@ namespace Template.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SignUp([FromBody] SignUpViewModel viewModel)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
-
             var user = await _userManager.FindByEmailAsync(viewModel.Email);
             if (user != null)
             {
-                // TODO user allready exists
-                return View("Error");
+                return Ok(new SignUpResult { DuplicateEmail = true });
             }
             user = new ApplicationUser
             {
@@ -400,7 +394,7 @@ namespace Template.Web.Controllers
                 Email = viewModel.Email,
                 UserName = viewModel.Email
             };
-            var result = await _userManager.CreateAsync(user, "Test123!#");
+            var result = await _userManager.CreateAsync(user);
             if (result.Succeeded)
             {
                 // send email confirmation link
@@ -412,12 +406,11 @@ namespace Template.Web.Controllers
                 var view = Path.Combine(Directory.GetCurrentDirectory(), "Views/Email/ConfirmAccountEmail.cshtml");
                 var mailHtml = await _viewRenderService.RenderMailHtml(view, new Callback(confirmUrl));
                 _mailSender.SendEmail(viewModel.Email, "Confirm your account", mailHtml);
-                return Ok();
+                return Ok(new SignUpResult { Success = true });
             }
             else
             {
-                // throw error
-                return View("ConfirmAccount", viewModel); // TODO
+                return Ok(new SignUpResult());
             }
         }
     }

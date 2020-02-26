@@ -32,7 +32,7 @@ export const ForgotPassword: FunctionComponent<ForgotPasswordProps> = (props: Fo
 
     const [isLoading, setIsLoading] = useState(false);
     const [userName, setUserName] = useState("");
-    const [invalidEmail, setInvalidEmail] = useState(true);
+    const [invalidEmail, setInvalidEmail] = useState(false);
     const [emailSend, setEmailSend] = useState(false);
 
     function handleSendMailClick() {
@@ -50,21 +50,21 @@ export const ForgotPassword: FunctionComponent<ForgotPasswordProps> = (props: Fo
     }
 
     return (
-        <div>
+        <div className="container">
             <div className="row">
                 <LoginDiv className="col mx-auto border rounded pt-5 pb-3 mt-5 card">
                     <h3 className="text-center mb-4">{defaults.projectName.toUpperCase()}</h3>
                     {!emailSend &&
                         <div>
-                            <div className="form-group ml-3 mr-3 mb-4">
+                            <div className="form-group ml-3 mr-3 mb-1">
                                 <label>{Localizer.L("Email")}</label>
                                 <input type="email" className="form-control input-lg" onChange={(e) => setUserName(e.target.value)} value={userName} />
                             </div>
                             {invalidEmail &&
-                                <div className="text-danger form-group ml-3 mr-3 mb-4">
+                                <div className="text-danger form-group ml-3 mr-3">
                                     {Localizer.L("Email not found.")}
                                 </div>}
-                            <div className="text-center mb-3">
+                            <div className="text-center mt-4 mb-3">
                                 <SubmitButton className="btn btn-primary btn-lg" onClick={handleSendMailClick}>{Localizer.L("Send email")}</SubmitButton>
                             </div>
                         </div>}

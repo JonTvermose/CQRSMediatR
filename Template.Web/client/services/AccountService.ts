@@ -47,6 +47,15 @@ export default class AccountService {
             });
     }
 
+    public signUp(username: string, firstName: string, lastName: string): Promise<Response> {
+        return this.httpService.post(defaults.jsonRoutes["signup"],
+            {
+                Email: username,
+                FirstName: firstName,
+                LastName: lastName
+            });
+    }
+
     public login(username: string, password: string, rememberMe: boolean): Promise<Response> {
         return this.httpService.post(defaults.jsonRoutes["login"],
             {

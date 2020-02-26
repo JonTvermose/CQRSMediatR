@@ -18,7 +18,7 @@ type LoginProps = {}
 
 const LoginButton = styled.button`
 border-radius: 25px;
-width: 150px;
+width: 200px;
 `;
 
 const LoginDiv = styled.div`
@@ -45,18 +45,11 @@ export const Login: FunctionComponent<LoginProps> = (props: LoginProps) => {
     const [lockedOut, setLockedOut] = useState(false);
     const [invalid2Fa, setInvalid2Fa] = useState(false);
 
-    //useEffect(() => {
-    //    // Submit when pressing enter
-    //    const listener = event => {
-    //        if (event.code === "Enter" || event.code === "NumpadEnter") {
-    //            handleLoginClick();
-    //        }
-    //    };
-    //    document.addEventListener("keydown", listener);
-    //    return () => {
-    //        document.removeEventListener("keydown", listener);
-    //    };
-    //}, []);
+    const [createAccount, setCreateAccount] = useState(false);
+    const [createdAccount, setCreatedAccount] = useState(false);
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [duplicateEmail, setDuplicateEmail] = useState(false);
 
     function handleLoginClick(e) {
         e.preventDefault();
@@ -121,12 +114,37 @@ export const Login: FunctionComponent<LoginProps> = (props: LoginProps) => {
         history.push("/home");
     }
 
+    function handleCreateClick(e) {
+        e.preventDefault();
+
+        setIsLoading(true);
+        accountService.signUp(userName, firstName, lastName)
+            .then(res => res.json())
+            .then(res => {
+                setIsLoading(false);
+                if (res.success) {
+                    setCreateAccount(false);
+                    setCreatedAccount(true);
+                } else if (res.duplicateEmail) {
+                    setDuplicateEmail(true);
+                } else {
+                    // TODO
+                    toast.error(Localizer.L("Error creating account."))
+                }
+            });
+    }
+
+    function handleForgotClick(e) {
+        e.preventDefault();
+        history.push("/forgotpassword");
+    }
+
     return (
-        <div>
+        <div className="container">
             <div className="row">
                 <LoginDiv className="col mx-auto border rounded pt-5 pb-3 mt-5 card">
                     <h3 className="text-center mb-4">{defaults.projectName.toUpperCase()}</h3>
-                    {promptTwoFactor && <div>
+                    {promptTwoFactor && !createAccount && !createdAccount && <div>
                         <form onSubmit={handle2faLoginClick}>
                             <div className="form-group ml-3 mr-3 mb-4">
                                 <label>{Localizer.L("Two-factor code")}</label>
@@ -145,7 +163,7 @@ export const Login: FunctionComponent<LoginProps> = (props: LoginProps) => {
                             </div>
                         </form>
                     </div>}
-                    {!promptTwoFactor && <div>
+                    {!promptTwoFactor && !createAccount && !createdAccount && <div>
                         <form onSubmit={handleLoginClick}>
                             <div className="form-group ml-3 mr-3 mb-4">
                                 <label>{Localizer.L("Email")}</label>
@@ -172,9 +190,48 @@ export const Login: FunctionComponent<LoginProps> = (props: LoginProps) => {
                             </div>
                         </form>
                         <div className="form-group text-center">
-                            <a href="#" className="text-muted" onClick={() => history.push("/forgotpassword")}><small>{Localizer.L("Forgot password?")}</small></a>
+                            <a href="" className="text-muted" onClick={handleForgotClick}><small>{Localizer.L("Forgot password?")}</small></a>
+                        </div>
+                        <div className="text-center mb-3">
+                            <LoginButton className="btn btn-outline-secondary btn-lg" onClick={() => setCreateAccount(true)}>{Localizer.L("Create account")}</LoginButton>
                         </div>
                     </div>}
+                    {createAccount &&
+                        <div>
+                            <form onSubmit={handleCreateClick}>
+                                <div className="form-group ml-3 mr-3 mb-1">
+                                    <label>{Localizer.L("Email")}</label>
+                                    <input type="email" className="form-control input-lg" onChange={(e) => setUserName(e.target.value)} value={userName} />
+                                </div>
+                                {duplicateEmail &&
+                                    <div className="text-danger form-group ml-3 mr-3">
+                                        {Localizer.L("Email allready exists.")} <a href="" onClick={handleForgotClick}>{Localizer.L("Forgot password?")}</a>
+                                    </div>}
+                                <div className="form-group ml-3 mr-3 mt-4 mb-4">
+                                    <label>{Localizer.L("First name")}</label>
+                                    <input type="text" className="form-control input-lg" onChange={(e) => setFirstName(e.target.value)} value={firstName} />
+                                </div>
+                                <div className="form-group ml-3 mr-3 mb-5">
+                                    <label>{Localizer.L("Last name")}</label>
+                                    <input type="text" className="form-control input-lg" onChange={(e) => setLastName(e.target.value)} value={lastName} />
+                                </div>
+                                <div className="text-center mb-3">
+                                    <LoginButton className="btn btn-primary btn-lg">{Localizer.L("Create account")}</LoginButton>
+                                </div>
+                                <div className="form-group text-center">
+                                    <a href="#" className="text-muted" onClick={() => setCreateAccount(false)}><small>{Localizer.L("Go to Login")}</small></a>
+                                </div>
+                            </form>
+                        </div>}
+                    {createdAccount &&
+                        <div>
+                            <div className="alert alert-success" role="alert">
+                                {Localizer.L("Account created! Please check your email to confirm your account and create a password.")}
+                            </div>
+                            <div className="text-center mb-3">
+                                <LoginButton className="btn btn-primary btn-lg" onClick={() => window.location.reload()}>{Localizer.L("Ok")}</LoginButton>
+                            </div>
+                        </div>}
 
                 </LoginDiv>
             </div>
