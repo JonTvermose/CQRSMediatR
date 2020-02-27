@@ -55,8 +55,8 @@ export const ListLogEntry: FunctionComponent<ListLogEntryProps> = () => {
     }
 
     return (
-        <div>
-            <h2>{Localizer.L("Log entriess")}</h2>
+        <div className="container">
+            <h2>{Localizer.L("Log entries")}</h2>
 
             <div className="row">
                 <HeaderDiv className="col-3">{Localizer.L("Type")}</HeaderDiv>

@@ -21,7 +21,7 @@ export const Home: FunctionComponent<HomeProps> = () => {
 
     const routesKeys = getKeys(defaults.jsonRoutes);
     return (
-        <div>
+        <div className="container">
             <h2 className="mt-4">{Localizer.L("Routes found in defaults.jsonRoutes")}</h2>
             <table className="table">
                 <thead>

@@ -21,13 +21,11 @@ const PrivateRouteRender: FunctionComponent<PrivateRouteProps> = ({ component: C
             {!hideNavbar &&
                 <div>
                     <Navbar />
-                    <div className="container">
                         <main role="main" className="pb-3">
                             <div className="App">
                                 <Component />
                             </div>
                         </main>
-                    </div>
                 </div>}
             {hideNavbar &&
                 <Component />

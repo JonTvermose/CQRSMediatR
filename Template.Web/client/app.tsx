@@ -15,6 +15,8 @@ import { ForgotPassword } from "./pages/account/forgot-password";
 import { Profile } from "./pages/account/profile";
 import { ConfirmAccount } from "./pages/account/confirm-account";
 
+import { ListStringResource } from "./pages/stringresource/list-stringresource";
+
 
 declare const successMessage: string;
 declare const errorMessage: string;
@@ -41,12 +43,12 @@ const App: React.FC = () => {
                     <Switch>
                         <Route exact path="/" component={Login} />
                         <Route exact path="/forgotpassword" component={ForgotPassword} />
-                        <Route pattern="/account/confirmaccount" component={ConfirmAccount} />
+                        <Route path="/account/confirmaccount" component={ConfirmAccount} />
 
                         <PrivateRoute exact path="/home" component={Home} />
                         <PrivateRoute exact path="/logentries" component={ListLogEntry} />
-                        <PrivateRoute pattern="/profile" component={Profile} />
-
+                        <PrivateRoute path="/profile" component={Profile} />
+                        <PrivateRoute pattern="/stringresources" component={ListStringResource} />
                     </Switch>
                     <ToastContainer autoClose={8000} position={toast.POSITION.BOTTOM_CENTER} />
                 </Router>

@@ -13,8 +13,4 @@
     <ProjectReference Include="..\Template.Infrastructure.DataAccess\Template.Infrastructure.DataAccess.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Queries\StringResource\Models\" />
-  </ItemGroup>
-
 </Project>

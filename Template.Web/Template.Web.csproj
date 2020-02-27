@@ -22,11 +22,13 @@
     <None Remove="client\pages\home.tsx" />
     <None Remove="client\pages\logentry\list-logentry.tsx" />
     <None Remove="client\pages\navbar.tsx" />
+    <None Remove="client\pages\stringresource\list-stringresource.tsx" />
     <None Remove="client\services\AccountService.ts" />
     <None Remove="client\services\ErrorService.ts" />
     <None Remove="client\services\HttpService.ts" />
     <None Remove="client\services\LocalizerService.ts" />
     <None Remove="client\services\LogEntryService.ts" />
+    <None Remove="client\services\StringResourceService.ts" />
     <None Remove="client\serviceWorker.tsx" />
   </ItemGroup>
 
@@ -70,10 +72,16 @@
     <TypeScriptCompile Update="client\pages\account\two-factor.tsx">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Update="client\pages\stringresource\list-stringresource.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Update="client\services\AccountService.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Update="client\services\LocalizerService.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="client\services\StringResourceService.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Template.Core.Command;
+using Template.Core.Data;
 using Template.Core.Query.Queries.StringResource;
 using Template.Web.Models.StringResourceModels;
 
@@ -21,6 +22,7 @@ namespace Template.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddMissingKey([FromBody] MissingStringResource inputModel)
         {
             await _mediator.Send(new InsertStringResourceCommand(inputModel.Key));
@@ -35,6 +37,13 @@ namespace Template.Web.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> GetResourceList([FromQuery] string[] languages)
+        {
+            var resourceList = await _mediator.Send(new LanguagesStringResourceQuery(languages));
+            return Ok(resourceList);
+        }
+
+        [HttpGet]
         public async Task<string> GetResourcesScript()
         {
             var stringResourceDictionary = await _mediator.Send(new LanguageStringResourceQuery("en-US"));
@@ -42,6 +51,15 @@ namespace Template.Web.Controllers
             var script = $"var stringResources = [{resources}];";
             return script;
         }
-        
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SaveStringResource([FromBody] StringResource resource)
+        {
+            // TODO mediator addOrupdate value
+            return Ok();
+        }
+
+
     }
 }
