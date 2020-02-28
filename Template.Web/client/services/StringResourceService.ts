@@ -27,4 +27,12 @@ export default class StringResourceService {
             });
     }
 
+    public deleteKey(key: string): Promise<Response> {
+        return this.httpService.post(defaults.jsonRoutes["deleteStringResource"],
+            {
+                Key: key
+            });
+    }
+    
+
 }

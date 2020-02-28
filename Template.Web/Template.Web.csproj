@@ -11,6 +11,7 @@
     <None Remove="client\components\private-route\private-route.tsx" />
     <None Remove="client\index.tsx" />
     <None Remove="client\models\defaults.ts" />
+    <None Remove="client\models\string-resource.ts" />
     <None Remove="client\models\user.ts" />
     <None Remove="client\pages\account\change-password.tsx" />
     <None Remove="client\pages\account\confirm-account.tsx" />
@@ -22,6 +23,7 @@
     <None Remove="client\pages\home.tsx" />
     <None Remove="client\pages\logentry\list-logentry.tsx" />
     <None Remove="client\pages\navbar.tsx" />
+    <None Remove="client\pages\stringresource\components\list-stringresource-item.tsx" />
     <None Remove="client\pages\stringresource\list-stringresource.tsx" />
     <None Remove="client\services\AccountService.ts" />
     <None Remove="client\services\ErrorService.ts" />
@@ -54,6 +56,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Update="client\models\string-resource.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Update="client\models\user.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -70,6 +75,9 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Update="client\pages\account\two-factor.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="client\pages\stringresource\components\list-stringresource-item.tsx">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Update="client\pages\stringresource\list-stringresource.tsx">

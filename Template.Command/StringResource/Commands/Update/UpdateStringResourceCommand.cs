@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Template.Core.Data;
 
 namespace Template.Core.Command
 {
@@ -18,5 +19,11 @@ namespace Template.Core.Command
             LanguageCode = languageCode;
         }
 
+        public UpdateStringResourceCommand(StringResource resource)
+        {
+            Key = resource.Key;
+            Value = resource.Value;
+            LanguageCode = resource.LanguageCode;
+        }
     }
 }

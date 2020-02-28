@@ -56,10 +56,19 @@ namespace Template.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SaveStringResource([FromBody] StringResource resource)
         {
-            // TODO mediator addOrupdate value
+            await _mediator.Send(new UpdateStringResourceCommand(resource));
             return Ok();
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteStringResource([FromBody] StringResourceKeyLanguageModel resource)
+        {
+            await _mediator.Send(new DeleteStringResourceCommand(resource));
+            return Ok();
+        }
+
+        
 
     }
 }

@@ -27,15 +27,16 @@ namespace Template.Core.Command
             if (string.IsNullOrWhiteSpace(request.Key))
                 throw new ArgumentNullException(nameof(request.Key));
 
-            var existing = await _dbContext.StringResources.SingleOrDefaultAsync(x => request.Key == x.Key && x.LanguageCode == "en-US");
+            var lang = request.LanguageCode ?? "en-US";
+            var existing = await _dbContext.StringResources.SingleOrDefaultAsync(x => request.Key == x.Key && x.LanguageCode == lang);
             if(existing != null)
                 throw new ArgumentException(nameof(request.Key));
 
             var entity = new StringResource
             {
                 Key = request.Key,
-                Value = request.Key,
-                LanguageCode = "en-US"
+                Value = request.Value ?? request.Key,
+                LanguageCode = lang
             };
             _dbContext.StringResources.Add(entity);
             await _dbContext.SaveChangesAsync();

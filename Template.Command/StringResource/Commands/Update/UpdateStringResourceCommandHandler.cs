@@ -22,14 +22,27 @@ namespace Template.Core.Command
         {
             if (string.IsNullOrWhiteSpace(request.Key))
                 throw new ArgumentNullException(nameof(request.Key));
-            if (string.IsNullOrWhiteSpace(request.Value))
-                throw new ArgumentNullException(nameof(request.Value));
             if (string.IsNullOrWhiteSpace(request.LanguageCode))
                 throw new ArgumentNullException(nameof(request.LanguageCode));
 
             var entity = await _dbContext.StringResources.SingleOrDefaultAsync(x => request.Key == x.Key && x.LanguageCode == request.LanguageCode);
             if(entity == null)
-                throw new ArgumentNullException(nameof(entity));
+            {
+                // Create a new entry
+                await _mediator.Send(new InsertStringResourceCommand(request.Key, request.Value, request.LanguageCode));
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(request.Value))
+            {
+                // Delete the entry for this specific languagecode
+                await _mediator.Send(new DeleteStringResourceCommand(new StringResourceKeyLanguageModel
+                {
+                    Key = request.Key,
+                    LanguageCode = request.LanguageCode
+                }));
+                return;
+            }
 
             entity.Value = request.Value;
 
