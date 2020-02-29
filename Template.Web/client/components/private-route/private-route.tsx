@@ -2,7 +2,6 @@
 import AccountService from '../../services/AccountService'
 import { Redirect, Route } from 'react-router-dom'
 import { Navbar } from "../../pages/navbar";
-import HttpService from '../../services/HttpService';
 
 interface PrivateRouteProps {
     component: any;

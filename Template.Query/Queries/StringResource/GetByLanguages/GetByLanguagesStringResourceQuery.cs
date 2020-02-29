@@ -6,11 +6,11 @@ using Template.Core.Query.Queries.StringResource.Models;
 
 namespace Template.Core.Query.Queries.StringResource
 {
-    public class LanguagesStringResourceQuery : IRequest<IList<LanguagesStringResourceQueryModel>>
+    public class GetByLanguagesStringResourceQuery : IRequest<IList<LanguagesStringResourceQueryModel>>
     {
         public string[] Languages { get; }
 
-        public LanguagesStringResourceQuery(string[] languages)
+        public GetByLanguagesStringResourceQuery(string[] languages)
         {
             Languages = languages;
         }

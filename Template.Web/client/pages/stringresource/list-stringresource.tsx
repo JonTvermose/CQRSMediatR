@@ -1,11 +1,16 @@
 ﻿import React, { FunctionComponent, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import posed from 'react-pose';
+import { toast } from 'react-toastify';
+
 import { LoadingSpinner } from "../../components/loading-spinner/loading-spinner";
+import { Modal } from "../../components/modal/modal";
+import { ListStringResourceItem } from "./components/list-stringresource-item";
+
 import StringResourceService from "../../services/StringResourceService";
 import Localizer from "../../services/LocalizerService";
+
 import { StringResourceItem } from "../../models/string-resource"
-import { ListStringResourceItem } from "./components/list-stringresource-item";
 
 type ListStringResourceProps = {}
 
@@ -14,10 +19,22 @@ font-size: 16px;
 font-weight: bold;
 `;
 
-const ListDiv = styled.div`
-font-size: 12px;
-margin-top: 1rem;
-`;
+const ModalDiv = posed.div({
+    open: {
+        y: 0,
+        opacity: 1,
+        delay: 300,
+        transition: {
+            y: { type: 'spring', stiffness: 1000, damping: 15 },
+            default: { duration: 300 }
+        }
+    },
+    closed: {
+        y: 50,
+        opacity: 0,
+        transition: { duration: 150 }
+    }
+});
 
 export const ListStringResource: FunctionComponent<ListStringResourceProps> = () => {
     let stringResourceService = new StringResourceService();
@@ -30,10 +47,12 @@ export const ListStringResource: FunctionComponent<ListStringResourceProps> = ()
     const [searchKey, setSearchKey] = useState("");
     const [searchValue, setSearchValue] = useState("");
     const [showMissing, setShowMissing] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [addLanguage, setAddLanguage] = useState("");
 
     function handleAddLanguageClick(e) {
         e.preventDefault();
-        window.alert("Not supported yet");
+        setShowModal(true);
     }
 
     useEffect(() => {
@@ -73,9 +92,37 @@ export const ListStringResource: FunctionComponent<ListStringResourceProps> = ()
         setResources(newResources);
     }
 
+    function handleOnShowMissing() {
+        setResources([]); // Bug in react? This is needed for the filter to apply properly
+        setShowMissing(!showMissing);
+    }
+
+    function handleAddLoadedLanguageClick() {
+        if (addLanguage.length === 5) {
+            let newLanguages = loadedLanguages;
+            newLanguages.push(addLanguage);
+            setLoadedLanguages(newLanguages);
+            setAddLanguage("");
+            setShowModal(false);
+        } else {
+            toast.error(Localizer.L("Language codes must be exactly 5 characters (da-DK)"))
+        }
+    }
+
     return (
         <div className="ml-5 mr-5">
             <h2>{Localizer.L("String resources")}</h2>
+            <Modal
+                visible={showModal}
+                headerText={Localizer.L("Add a language")}
+                closeText={Localizer.L("Close")}
+                saveText={Localizer.L("Add language")}
+                onCloseClick={() => setShowModal(false)}
+                onSaveClick={handleAddLoadedLanguageClick} >
+                <div className="form-group">
+                    <input type="text" className="form-control" onChange={(e) => setAddLanguage(e.target.value)} value={addLanguage} />
+                </div>
+            </Modal>
 
             <form>
                 <div className="form-group row mt-2 mb-2">
@@ -87,7 +134,7 @@ export const ListStringResource: FunctionComponent<ListStringResourceProps> = ()
                     </div>
                     <div className="col">
                         <input type="checkbox" className="pt-1" onChange={(e) => setShowMissing(!showMissing)} checked={showMissing} />
-                        <label className="form-check-label ml-2 noselect pt-1" onClick={(e) => setShowMissing(!showMissing)}>
+                        <label className="form-check-label ml-2 noselect pt-1" onClick={handleOnShowMissing}>
                             {Localizer.L("Only show missing values")}
                         </label>
                     </div>
@@ -101,8 +148,8 @@ export const ListStringResource: FunctionComponent<ListStringResourceProps> = ()
                 <HeaderDiv className="col-xl-2 col-3">{Localizer.L("Key")}</HeaderDiv>
                 {loadedLanguages.map(
                     (value, index) =>
-                        <HeaderDiv key={index} className="col">
-                            {Localizer.L("Value")}: {value}
+                        <HeaderDiv key={index} className="col ml-1">
+                            {value}
                         </HeaderDiv>
                 )}
                 <HeaderDiv className="col-1">
@@ -111,7 +158,7 @@ export const ListStringResource: FunctionComponent<ListStringResourceProps> = ()
 
             {resources.map(
                 (value, index) =>
-                    <ListStringResourceItem key={index} item={value} languages={loadedLanguages} onItemChange={handleOnItemChange} onItemDeleted={handleOnItemDeleted} />
+                    <ListStringResourceItem key={"listItem" + index} item={value} languages={loadedLanguages} onItemChange={handleOnItemChange} onItemDeleted={handleOnItemDeleted} />
             )}
 
             {resources.length === 0 &&

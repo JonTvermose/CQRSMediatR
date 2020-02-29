@@ -9,16 +9,16 @@ using Template.Core.Query.Queries.StringResource.Models;
 
 namespace Template.Core.Query.Queries.StringResource
 {
-    public class LanguagesStringResourceQueryHandler : IRequestHandler<LanguagesStringResourceQuery, IList<LanguagesStringResourceQueryModel>>
+    public class GetByLanguagesStringResourceQueryHandler : IRequestHandler<GetByLanguagesStringResourceQuery, IList<LanguagesStringResourceQueryModel>>
     {
         private readonly QueryDb _queryDb;
 
-        public LanguagesStringResourceQueryHandler(QueryDb queryDb)
+        public GetByLanguagesStringResourceQueryHandler(QueryDb queryDb)
         {
             _queryDb = queryDb;
         }
 
-        public async Task<IList<LanguagesStringResourceQueryModel>> Handle(LanguagesStringResourceQuery request, CancellationToken cancellationToken)
+        public async Task<IList<LanguagesStringResourceQueryModel>> Handle(GetByLanguagesStringResourceQuery request, CancellationToken cancellationToken)
         {
             var result = _queryDb.StringResources
                 .Where(x => request.Languages.Contains(x.LanguageCode))

@@ -1,7 +1,7 @@
 ﻿import React, { FunctionComponent, useState } from 'react';
 import styled from 'styled-components';
 import posed from 'react-pose';
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { LoadingSpinner } from "../components/loading-spinner/loading-spinner";
 
 import Localizer from "../services/LocalizerService";
@@ -14,7 +14,6 @@ type NavbarProps = {}
 
 export const Navbar: FunctionComponent<NavbarProps> = () => {
     const accountService = new AccountService();
-    let history = useHistory();
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -32,19 +31,24 @@ export const Navbar: FunctionComponent<NavbarProps> = () => {
                 </div>
                 <div className="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
                     <ul className="navbar-nav mr-auto">
-                        <li className="nav-item active">
+                        <li className={"nav-item" + (window.location.pathname == "/home" ? " active" : "")}>
                             <Link to="/home" className="nav-link">{Localizer.L("Home")}</Link>
                         </li>
-                        <li className="nav-item">
+                        <li className={"nav-item" + (window.location.pathname == "/logentries" ? " active" : "")}>
                             <Link to="/logentries" className="nav-link">{Localizer.L("Log entries")}</Link>
+                        </li>
+                        <li className={"nav-item" + (window.location.pathname == "/stringresources" ? " active" : "")}>
+                            <Link to="/stringresources" className="nav-link">{Localizer.L("Localization")}</Link>
                         </li>
                     </ul>
                 </div>
 
                 <div className="navbar-collapse collapse w-100 order-3 dual-collapse2">
                     <ul className="navbar-nav ml-auto">
-                        <li className="nav-item">
-                            <Link to="/profile" className="nav-link">{Localizer.L("Profile")}</Link>
+                        <li className={"nav-item" + (window.location.pathname.startsWith("/profile") ? " active" : "")}>
+                            <Link to="/profile" className="nav-link">
+                                {Localizer.L("Profile")}
+                            </Link>
                         </li>
                         <li className="nav-item">
                             <a href="/logout" className="nav-link" onClick={handleOnLogoutClick}>{Localizer.L("Logout")}</a>

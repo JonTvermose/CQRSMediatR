@@ -32,21 +32,21 @@ namespace Template.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> GetResources(string languageCode)
         {
-            var stringResourceDictionary = await _mediator.Send(new LanguageStringResourceQuery(languageCode));
+            var stringResourceDictionary = await _mediator.Send(new GetByLanguageStringResourceQuery(languageCode));
             return Ok(new StringResourcesLanguage { languageCode = languageCode, values = stringResourceDictionary });
         }
 
         [HttpGet]
         public async Task<IActionResult> GetResourceList([FromQuery] string[] languages)
         {
-            var resourceList = await _mediator.Send(new LanguagesStringResourceQuery(languages));
+            var resourceList = await _mediator.Send(new GetByLanguagesStringResourceQuery(languages));
             return Ok(resourceList);
         }
 
         [HttpGet]
         public async Task<string> GetResourcesScript()
         {
-            var stringResourceDictionary = await _mediator.Send(new LanguageStringResourceQuery("en-US"));
+            var stringResourceDictionary = await _mediator.Send(new GetByLanguageStringResourceQuery("en-US"));
             var resources = JsonSerializer.Serialize(new StringResourcesLanguage { languageCode = "en-US", values = stringResourceDictionary });
             var script = $"var stringResources = [{resources}];";
             return script;

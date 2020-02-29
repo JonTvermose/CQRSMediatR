@@ -1,4 +1,4 @@
-﻿import React, { FunctionComponent, useState, useEffect } from 'react';
+﻿import React, { FunctionComponent, useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import posed from 'react-pose';
 import { toast } from 'react-toastify';
@@ -19,35 +19,21 @@ font-size: 12px;
 margin-top: 1rem;
 `;
 
-const SavedDiv = posed.div({
-    open: {
-        opacity: 1,
-        delay: 300,
-        transition: {
-            default: { duration: 300 }
-        }
-    },
-    closed: {
-        opacity: 0,
-        transition: { duration: 150 }
-    }
-});
-
 export const ListStringResourceItem: FunctionComponent<ListStringResourceItemProps> = (props: ListStringResourceItemProps) => {
     let stringResourceService = new StringResourceService();
 
     const [isLoading, setIsLoading] = useState(false);
-    const [wasSaved, setWasSaved] = useState(false);
 
     function handleSave(e, lang: string) {
+        let element = e.target.parentNode.firstChild;
         setIsLoading(true);
         stringResourceService.updateKeyValue(props.item.key, e.target.value, lang)
             .then(res => {
                 setIsLoading(false);
                 if (res.ok) {
-                    setWasSaved(true);
+                    element.className = "visible";
                     setTimeout(function () {
-                        setWasSaved(false)
+                        element.className = "";
                     }, 2000);
                 } else {
                     toast.error(Localizer.L("Error saving resource."));
@@ -84,10 +70,10 @@ export const ListStringResourceItem: FunctionComponent<ListStringResourceItemPro
             {props.languages.map(
                 (lang, langIndex) =>
                     <div key={langIndex} className="col">
-                        <SavedDiv style={{ position: "absolute", right: "20px" }} pose={wasSaved ? 'open' : 'closed'}>Saved</SavedDiv>
+                        <div key={langIndex + "saved"} style={{ position: "absolute", right: "20px", color: "#26de81", fontWeight: "bold", opacity: 0 }} >Saved</div>
                         <textarea disabled={isLoading} className="form-control" onChange={(e) => handleChange(e, lang)} onBlur={(e) => handleSave(e, lang)} value={props.item.values[lang]} />
                     </div>           
-            )}
+            )}    
             <div className="col-1">
                 <button className="btn btn-sm btn-outline-danger" onClick={handleDelete}>{Localizer.L("Delete")}</button>
             </div>
