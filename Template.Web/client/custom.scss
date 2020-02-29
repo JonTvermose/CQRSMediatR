@@ -70,8 +70,19 @@ $theme-colors: ( "primary": #2d98da, "secondary": #a5b1c2, "success": #26de81, "
         border-top: none !important;
     }
 
-    .modal{
+    .modal {
         background-color: rgba(0,0,0,0.4);
+    }
+
+    .dropdown-menu {
+        left: auto !important;
+        display: block !important;
+        top: auto !important;
+    }
+
+    .dropdown-link:hover {
+        background-color: rgba(0,0,0,0.3);
+        color: #fff !important;
     }
 }
 

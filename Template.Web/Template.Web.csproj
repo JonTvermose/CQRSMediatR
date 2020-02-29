@@ -9,6 +9,8 @@
     <None Remove="client\components\error-boundary\error-boundary.tsx" />
     <None Remove="client\components\loading-spinner\loading-spinner.tsx" />
     <None Remove="client\components\modal\modal.tsx" />
+    <None Remove="client\components\navbar\navbar-dropdown-link.tsx" />
+    <None Remove="client\components\navbar\navbar-dropdown.tsx" />
     <None Remove="client\components\private-route\private-route.tsx" />
     <None Remove="client\index.tsx" />
     <None Remove="client\models\defaults.ts" />
@@ -58,6 +60,12 @@
 
   <ItemGroup>
     <TypeScriptCompile Update="client\components\modal\modal.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="client\components\navbar\navbar-dropdown-link.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="client\components\navbar\navbar-dropdown.tsx">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Update="client\models\string-resource.ts">

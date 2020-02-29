@@ -2,11 +2,13 @@
 import styled from 'styled-components';
 import posed from 'react-pose';
 import { Link } from "react-router-dom";
-import { LoadingSpinner } from "../components/loading-spinner/loading-spinner";
+import { LoadingSpinner } from "../loading-spinner/loading-spinner";
+import { NavbarDropdown } from "./navbar-dropdown";
 
-import Localizer from "../services/LocalizerService";
-import AccountService from "../services/AccountService";
-import { Defaults } from "../models/defaults";
+
+import Localizer from "../../services/LocalizerService";
+import AccountService from "../../services/AccountService";
+import { Defaults } from "../../models/defaults";
 
 declare const defaults: Defaults;
 
@@ -23,6 +25,9 @@ export const Navbar: FunctionComponent<NavbarProps> = () => {
         accountService.logout();
     }
 
+    const administrationDropdowns = [
+        { path: "/stringresources", text: Localizer.L("Localization") },
+        { path: "/logentries", text: Localizer.L("Log entries") }];
     return (
         <header>
             <nav className="navbar navbar-expand-md navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
@@ -34,17 +39,13 @@ export const Navbar: FunctionComponent<NavbarProps> = () => {
                         <li className={"nav-item" + (window.location.pathname == "/home" ? " active" : "")}>
                             <Link to="/home" className="nav-link">{Localizer.L("Home")}</Link>
                         </li>
-                        <li className={"nav-item" + (window.location.pathname == "/logentries" ? " active" : "")}>
-                            <Link to="/logentries" className="nav-link">{Localizer.L("Log entries")}</Link>
-                        </li>
-                        <li className={"nav-item" + (window.location.pathname == "/stringresources" ? " active" : "")}>
-                            <Link to="/stringresources" className="nav-link">{Localizer.L("Localization")}</Link>
-                        </li>
                     </ul>
                 </div>
 
                 <div className="navbar-collapse collapse w-100 order-3 dual-collapse2">
                     <ul className="navbar-nav ml-auto">
+                        <NavbarDropdown text={Localizer.L("Administration")} links={administrationDropdowns} />
+
                         <li className={"nav-item" + (window.location.pathname.startsWith("/profile") ? " active" : "")}>
                             <Link to="/profile" className="nav-link">
                                 {Localizer.L("Profile")}

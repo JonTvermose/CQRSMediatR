@@ -28,6 +28,7 @@ export const ListStringResource: FunctionComponent<ListStringResourceProps> = ()
     const [allResources, setAllResources] = useState<StringResourceItem[]>([]);
     const [loadedLanguages, setLoadedLanguages] = useState<string[]>(["en-US"]);
     const [allLanguages, setAllLanguages] = useState<string[]>([]);
+    const [availableLanguages, setAvailableLanguages] = useState<any[]>([]);
 
     const [searchKey, setSearchKey] = useState("");
     const [searchValue, setSearchValue] = useState("");
@@ -41,6 +42,7 @@ export const ListStringResource: FunctionComponent<ListStringResourceProps> = ()
             .then(res => res.json())
             .then(res => {
                 setAllLanguages(res);
+                setAvailableLanguages(res.map(x => ({ value: x, label: x })));
             });
     }, []);
 
@@ -96,18 +98,30 @@ export const ListStringResource: FunctionComponent<ListStringResourceProps> = ()
             return;
         }
         if (addLanguage.length === 5) {
+            if (addLanguage.indexOf("-") !== 2) {
+                toast.error(Localizer.L("Language codes must be in format xx-XX (en-US, da-DK, etc)"));
+                return;
+            }
             let newLanguages = loadedLanguages;
             newLanguages.push(addLanguage);
             setLoadedLanguages(newLanguages);
-            let newAllLanguages = allLanguages;
-            newAllLanguages.push(addLanguage);
-            setAllLanguages(newAllLanguages);
+            if (!allLanguages.find(x => x === addLanguage)) {
+                let newAllLanguages = allLanguages;
+                newAllLanguages.push(addLanguage);
+                setAllLanguages(newAllLanguages);
+                setAvailableLanguages(newAllLanguages.map(x => ({ value: x, label: x })));
+            }
             setAddLanguage("");
             setShowModal(false);
             getResources();
         } else {
             toast.error(Localizer.L("Language codes must be exactly 5 characters (da-DK)"))
         }
+    }
+
+    function handleHideLanguage(language: string) {
+        let newLoadedLanguages = loadedLanguages.filter(x => x !== language);
+        setLoadedLanguages(newLoadedLanguages);
     }
 
     return (
@@ -122,7 +136,7 @@ export const ListStringResource: FunctionComponent<ListStringResourceProps> = ()
                 onSaveClick={handleAddLoadedLanguageClick} >
                 <div className="form-group mr-3 ml-3">
                     <label>{Localizer.L("Select an existing language")}</label>
-                    <Select options={allLanguages.filter(x => !loadedLanguages.includes(x)).map(x => ({ value: x, label: x }))} onChange={(e) => setAddLanguage(e.value)} />
+                    <Select options={availableLanguages} onChange={(e) => setAddLanguage(e.value)} />
                 </div>
                 <div className="form-group mr-3 ml-3">
                     <label>{Localizer.L("Create a new language")}</label>
@@ -156,6 +170,9 @@ export const ListStringResource: FunctionComponent<ListStringResourceProps> = ()
                     (value, index) =>
                         <HeaderDiv key={index} className="col ml-1">
                             {value}
+                            <button type="button" className="close" onClick={() => handleHideLanguage(value)}>
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </HeaderDiv>
                 )}
                 <HeaderDiv className="col-1">

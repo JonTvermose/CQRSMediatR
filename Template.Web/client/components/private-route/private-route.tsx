@@ -1,7 +1,7 @@
 ﻿import React, { FunctionComponent } from 'react';
 import AccountService from '../../services/AccountService'
 import { Redirect, Route } from 'react-router-dom'
-import { Navbar } from "../../pages/navbar";
+import { Navbar } from "../navbar/navbar";
 
 interface PrivateRouteProps {
     component: any;
