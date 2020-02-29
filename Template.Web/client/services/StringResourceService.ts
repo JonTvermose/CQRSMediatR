@@ -33,6 +33,10 @@ export default class StringResourceService {
                 Key: key
             });
     }
+
+    public getLanguages(): Promise<Response> {
+        return this.httpService.get(defaults.jsonRoutes["getLanguages"]);
+    }
     
 
 }

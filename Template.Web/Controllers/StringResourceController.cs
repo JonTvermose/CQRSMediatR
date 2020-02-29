@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Template.Core.Command;
 using Template.Core.Data;
 using Template.Core.Query.Queries.StringResource;
+using Template.Core.Query.Queries.StringResource.GetLanguages;
 using Template.Web.Models.StringResourceModels;
 
 namespace Template.Web.Controllers
@@ -41,6 +42,13 @@ namespace Template.Web.Controllers
         {
             var resourceList = await _mediator.Send(new GetByLanguagesStringResourceQuery(languages));
             return Ok(resourceList);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetLanguages()
+        {
+            var languages = await _mediator.Send(new GetLanguagesQuery());
+            return Ok(languages);
         }
 
         [HttpGet]

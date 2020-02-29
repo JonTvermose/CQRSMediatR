@@ -2,6 +2,7 @@
 import styled from 'styled-components';
 import posed from 'react-pose';
 import { toast } from 'react-toastify';
+import Select from 'react-select';
 
 import { LoadingSpinner } from "../../components/loading-spinner/loading-spinner";
 import { Modal } from "../../components/modal/modal";
@@ -19,30 +20,14 @@ font-size: 16px;
 font-weight: bold;
 `;
 
-const ModalDiv = posed.div({
-    open: {
-        y: 0,
-        opacity: 1,
-        delay: 300,
-        transition: {
-            y: { type: 'spring', stiffness: 1000, damping: 15 },
-            default: { duration: 300 }
-        }
-    },
-    closed: {
-        y: 50,
-        opacity: 0,
-        transition: { duration: 150 }
-    }
-});
-
 export const ListStringResource: FunctionComponent<ListStringResourceProps> = () => {
     let stringResourceService = new StringResourceService();
 
     const [isLoading, setIsLoading] = useState(false);
     const [resources, setResources] = useState<StringResourceItem[]>([]);
     const [allResources, setAllResources] = useState<StringResourceItem[]>([]);
-    const [loadedLanguages, setLoadedLanguages] = useState<string[]>(["en-US", "da-DK"]);
+    const [loadedLanguages, setLoadedLanguages] = useState<string[]>(["en-US"]);
+    const [allLanguages, setAllLanguages] = useState<string[]>([]);
 
     const [searchKey, setSearchKey] = useState("");
     const [searchValue, setSearchValue] = useState("");
@@ -50,25 +35,28 @@ export const ListStringResource: FunctionComponent<ListStringResourceProps> = ()
     const [showModal, setShowModal] = useState(false);
     const [addLanguage, setAddLanguage] = useState("");
 
-    function handleAddLanguageClick(e) {
-        e.preventDefault();
-        setShowModal(true);
-    }
-
     useEffect(() => {
-        setIsLoading(true);
-        stringResourceService.getStringResources(loadedLanguages)
+        getResources();
+        stringResourceService.getLanguages()
             .then(res => res.json())
             .then(res => {
-                setResources(res);
-                setAllResources(res);
-                setIsLoading(false);
+                setAllLanguages(res);
             });
     }, []);
 
     useEffect(() => {
         handleSearchStringChange();
-    }, [searchKey, searchValue, showMissing]);
+    }, [searchKey, searchValue, showMissing, allResources]);
+
+    function getResources() {
+        setIsLoading(true);
+        stringResourceService.getStringResources(loadedLanguages)
+            .then(res => res.json())
+            .then(res => {
+                setAllResources(res);
+                setIsLoading(false);
+            });
+    }
 
     function handleSearchStringChange() {
         const searchResult = allResources
@@ -97,13 +85,26 @@ export const ListStringResource: FunctionComponent<ListStringResourceProps> = ()
         setShowMissing(!showMissing);
     }
 
+    function handleAddLanguageClick(e) {
+        e.preventDefault();
+        setShowModal(true);
+    }
+
     function handleAddLoadedLanguageClick() {
+        if (loadedLanguages.includes(addLanguage)) {
+            toast.info(Localizer.L("Language code is already shown."));
+            return;
+        }
         if (addLanguage.length === 5) {
             let newLanguages = loadedLanguages;
             newLanguages.push(addLanguage);
             setLoadedLanguages(newLanguages);
+            let newAllLanguages = allLanguages;
+            newAllLanguages.push(addLanguage);
+            setAllLanguages(newAllLanguages);
             setAddLanguage("");
             setShowModal(false);
+            getResources();
         } else {
             toast.error(Localizer.L("Language codes must be exactly 5 characters (da-DK)"))
         }
@@ -119,7 +120,12 @@ export const ListStringResource: FunctionComponent<ListStringResourceProps> = ()
                 saveText={Localizer.L("Add language")}
                 onCloseClick={() => setShowModal(false)}
                 onSaveClick={handleAddLoadedLanguageClick} >
-                <div className="form-group">
+                <div className="form-group mr-3 ml-3">
+                    <label>{Localizer.L("Select an existing language")}</label>
+                    <Select options={allLanguages.filter(x => !loadedLanguages.includes(x)).map(x => ({ value: x, label: x }))} onChange={(e) => setAddLanguage(e.value)} />
+                </div>
+                <div className="form-group mr-3 ml-3">
+                    <label>{Localizer.L("Create a new language")}</label>
                     <input type="text" className="form-control" onChange={(e) => setAddLanguage(e.target.value)} value={addLanguage} />
                 </div>
             </Modal>
