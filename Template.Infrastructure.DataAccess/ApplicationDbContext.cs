@@ -31,6 +31,9 @@ namespace Template.Infrastructure.DataAccess
 
             builder.Entity<StringResource>()
                 .HasKey(x => new { x.Key, x.LanguageCode });
+
+            builder.Entity<LogEntry>()
+                .HasIndex(x => x.LogEntryType);
         }
 
         public DbSet<StringResource> StringResources { get; set; }

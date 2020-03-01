@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Template.Core.Query.Queries.LogEntry.Models;
+using Template.Core.Data;
 
 namespace Template.Core.Query.Queries.LogEntry
 {
@@ -25,6 +26,7 @@ namespace Template.Core.Query.Queries.LogEntry
         public async Task<IEnumerable<LogEntryListview>> Handle(ListLogEntriesQuery request, CancellationToken cancellationToken)
         {
             return _queryDb.LogEntries
+                .Where(x => x.LogEntryType == LogEntryType.Exception)
                 .OrderByDescending(x => x.TimeStamp)
                 .Take(request.MaxLogEntries)
                 .ProjectTo<LogEntryListview>(_mapper.ConfigurationProvider)

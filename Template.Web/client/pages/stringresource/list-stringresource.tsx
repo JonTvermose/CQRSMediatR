@@ -126,7 +126,7 @@ export const ListStringResource: FunctionComponent<ListStringResourceProps> = ()
 
     return (
         <div className="ml-5 mr-5">
-            <h2>{Localizer.L("String resources")}</h2>
+            <h2>{Localizer.L("Localization")}</h2>
             <Modal
                 visible={showModal}
                 headerText={Localizer.L("Add a language")}

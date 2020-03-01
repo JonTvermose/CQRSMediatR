@@ -13,6 +13,6 @@ type NavbarDropdownLinkProps = {
 export const NavbarDropdownLink: FunctionComponent<NavbarDropdownLinkProps> = (props) => {
 
     return (
-        <Link to={props.path} className={"pl-4 nav-link dropdown-link" + (window.location.pathname === props.path ? " active" : ""}>{props.text}</Link>
+        <Link to={props.path} className={"pl-4 nav-link dropdown-link" + (window.location.pathname === props.path ? " active" : "")}>{props.text}</Link>
     )
 }

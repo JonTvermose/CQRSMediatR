@@ -38,6 +38,8 @@ namespace Template.Web
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
                 using (var sw = new StreamWriter(new FileStream("StartupErrors.txt", FileMode.Append, FileAccess.Write)))
                 {
                     sw.WriteLine($"{DateTime.UtcNow.ToString("[yyyy-MM-dd][HH:mm:ss]")} {e}");

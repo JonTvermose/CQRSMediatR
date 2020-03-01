@@ -23,6 +23,7 @@
     <None Remove="client\pages\account\login.tsx" />
     <None Remove="client\pages\account\profile.tsx" />
     <None Remove="client\pages\account\two-factor.tsx" />
+    <None Remove="client\pages\account\user-activity.tsx" />
     <None Remove="client\pages\home.tsx" />
     <None Remove="client\pages\logentry\list-logentry.tsx" />
     <None Remove="client\pages\navbar.tsx" />
@@ -87,6 +88,9 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Update="client\pages\account\two-factor.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="client\pages\account\user-activity.tsx">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Update="client\pages\stringresource\components\list-stringresource-item.tsx">

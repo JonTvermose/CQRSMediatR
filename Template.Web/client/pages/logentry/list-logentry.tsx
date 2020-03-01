@@ -15,6 +15,7 @@ font-weight: bold;
 const ListDiv = styled.div`
 font-size: 12px;
 margin-top: 1rem;
+word-break: break-all;
 `;
 
 export const ListLogEntry: FunctionComponent<ListLogEntryProps> = () => {

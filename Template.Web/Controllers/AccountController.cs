@@ -59,8 +59,8 @@ namespace Template.Web.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    // _logger.LogInformation("User logged in.");
                     var user = await _userManager.FindByEmailAsync(model.Email);
+                    await _mediator.Send(new InsertLogEntryCommand(Request.HttpContext, LogEntryType.UserLogin, user.Id));
                     return Ok(new LoginResult { IsAuthenticated = true, CurrentUser = _mapper.Map<CurrentUserViewModel>(user) });
                 }
                 if (result.RequiresTwoFactor)
@@ -103,7 +103,7 @@ namespace Template.Web.Controllers
             var result = await _signInManager.TwoFactorAuthenticatorSignInAsync(authenticatorCode, rememberMe, model.RememberMe);
             if (result.Succeeded)
             {
-                // _logger.LogInformation("User with ID {UserId} logged in with 2fa.", user.Id);
+                await _mediator.Send(new InsertLogEntryCommand(Request.HttpContext, LogEntryType.UserLogin, user.Id));
                 return Ok(new LoginResult { IsAuthenticated = true, CurrentUser = _mapper.Map<CurrentUserViewModel>(user) });
             }
             else if (result.IsLockedOut)
@@ -173,7 +173,7 @@ namespace Template.Web.Controllers
 
             await _userManager.SetTwoFactorEnabledAsync(user, true);
             var recoveryCodes = (await _userManager.GenerateNewTwoFactorRecoveryCodesAsync(user, 10)).ToList();
-
+            await _mediator.Send(new InsertLogEntryCommand(Request.HttpContext, LogEntryType.UserAddTwoFactor, user.Id));
             return Ok(new EnableTwoFactorResult { Success = true, RecoveryCodes = recoveryCodes});
         }
 
@@ -189,6 +189,7 @@ namespace Template.Web.Controllers
 
             await _userManager.SetTwoFactorEnabledAsync(user, false);
             await _userManager.ResetAuthenticatorKeyAsync(user);
+            await _mediator.Send(new InsertLogEntryCommand(Request.HttpContext, LogEntryType.UserRemoveTwoFactor, user.Id));
             return Ok();
         }
 
@@ -215,6 +216,7 @@ namespace Template.Web.Controllers
                 model.CallbackUrl = callbackUrl;
                 var mailHtml = await _viewRenderService.RenderMailHtml("ForgotPassword", model);
                 _mailSender.SendEmail(model.Email, $"{user.FirstName} {user.LastName}", "Reset your password", mailHtml);
+                await _mediator.Send(new InsertLogEntryCommand(Request.HttpContext, LogEntryType.UserForgotPassword, user.Id));
                 return Ok(new ForgotPasswordResult { EmailSend = true });
             }
 
@@ -238,6 +240,7 @@ namespace Template.Web.Controllers
             var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
             if (result.Succeeded)
             {
+                await _mediator.Send(new InsertLogEntryCommand(Request.HttpContext, LogEntryType.UserPasswordReset, user.Id));
                 return Ok(new ResetPasswordResult { IsReset = true });
             }
             return Ok(new ResetPasswordResult { IsReset = false });
@@ -259,6 +262,7 @@ namespace Template.Web.Controllers
             var result = await _userManager.ChangePasswordAsync(user, model.Password, model.NewPassword);
             if (result.Succeeded)
             {
+                await _mediator.Send(new InsertLogEntryCommand(Request.HttpContext, LogEntryType.UserPasswordChange, user.Id));
                 return Ok(new ChangePasswordResult { HasChanged = true });
             }
             return Ok(new ChangePasswordResult { HasChanged = false });
@@ -324,7 +328,6 @@ namespace Template.Web.Controllers
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            // _logger.LogInformation("User logged out.");
             return Ok(new LoginResult { IsAuthenticated = false });
         }
 
@@ -345,6 +348,7 @@ namespace Template.Web.Controllers
             }
             var decodedUrl = HttpUtility.UrlDecode(viewModel.Code).Replace(' ', '+');
             var result = await _userManager.ConfirmEmailAsync(user, decodedUrl);
+            await _mediator.Send(new InsertLogEntryCommand(Request.HttpContext, LogEntryType.UserConfirmEmail, user.Id));
             if (result.Succeeded)
             {
                 var res = await _userManager.AddPasswordAsync(user, viewModel.Password);
@@ -353,6 +357,7 @@ namespace Template.Web.Controllers
                     return Ok(new ConfirmAccountResult { InvalidPassword = true });
                 }
 
+                await _mediator.Send(new InsertLogEntryCommand(Request.HttpContext, LogEntryType.UserPasswordChange, user.Id));
                 return Ok(new ConfirmAccountResult { Success = true });
             }
             else

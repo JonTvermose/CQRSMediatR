@@ -21,9 +21,12 @@ namespace Template.Web.Mappings
                 .ReverseMap();
             CreateMap<LogEntry, LogEntryDetails>()
                 .ReverseMap();
+            CreateMap<LogEntry, UserActivity>()
+                .ForMember(dest => dest.TimeStamp, opts => opts.MapFrom(src => src.TimeStamp.ToString("dd-MM yyyy HH:mm")));
 
             CreateMap<ApplicationUser, CurrentUserViewModel>()
                 .ForMember(x => x.FullName, opts => opts.Ignore());
+
             
         }
     }

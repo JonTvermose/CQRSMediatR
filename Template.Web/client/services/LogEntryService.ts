@@ -13,4 +13,8 @@ export default class LogEntryService {
         return this.httpService.get(defaults.jsonRoutes["getlogentries"]);
     }
 
+    public getUserActivity(): Promise<Response> {
+        return this.httpService.get(defaults.jsonRoutes["getUserActivity"]);
+    }
+
 }

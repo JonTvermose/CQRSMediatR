@@ -7,8 +7,7 @@ import { LoadingSpinner } from "../../components/loading-spinner/loading-spinner
 import { EditProfile } from "./edit-profile";
 import { ChangePassword } from "./change-password";
 import { TwoFactor } from "./two-factor";
-
-
+import { UserActivity } from "./user-activity";
 
 import Localizer from "../../services/LocalizerService";
 
@@ -28,7 +27,7 @@ export const Profile: FunctionComponent<ProfileProps> = () => {
     }
 
     return (
-        <ContentDiv>
+        <ContentDiv className="container">
             <div className="row mt-6">
                 <nav className="col-sm-4 sidebar">
                     <ul className="nav nav-pills flex-column ml-4">
@@ -41,12 +40,16 @@ export const Profile: FunctionComponent<ProfileProps> = () => {
                         <li className="nav-item">
                             <a className={"nav-link" + (showPage === ProfilePages.setup2Fa ? " active" : "")} href="" onClick={(e) => setPage(ProfilePages.setup2Fa, e)}>{Localizer.L("Two-factor authentication")}</a>
                         </li>
+                        <li className="nav-item">
+                            <a className={"nav-link" + (showPage === ProfilePages.userActivity ? " active" : "")} href="" onClick={(e) => setPage(ProfilePages.userActivity, e)}>{Localizer.L("User activity")}</a>
+                        </li>
                     </ul>
                 </nav>
                 <div className="col-sm">
                     {showPage === ProfilePages.editProfile && <EditProfile />}
                     {showPage === ProfilePages.changePassword && <ChangePassword />}
                     {showPage === ProfilePages.setup2Fa && <TwoFactor />}
+                    {showPage === ProfilePages.userActivity && <UserActivity />}
                 </div>
             </div>
         </ContentDiv>)
@@ -55,5 +58,6 @@ export const Profile: FunctionComponent<ProfileProps> = () => {
 enum ProfilePages {
     editProfile,
     changePassword,
-    setup2Fa
+    setup2Fa,
+    userActivity
 }
