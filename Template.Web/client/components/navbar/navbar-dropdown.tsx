@@ -12,14 +12,16 @@ type NavbarDropdownProps = {
 const DropdownDiv = posed.div({
     enter: {
         y: 0,
+        scale: 1,
         opacity: 1,
-        delay: 300,
-        transition: { duration: 0 }
+        delay: 0,
+        transition: { duration: 150 }
     },
     exit: {
-        y: -0,
+        y: -80,
+        scale: 0,
         opacity: 0,
-        transition: { duration: 150 }
+        transition: { duration: 500 }
     }
 });
 

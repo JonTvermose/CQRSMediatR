@@ -25,12 +25,14 @@ using Template.Utility.Models;
 using Template.Core.Query.Queries.LogEntry;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Http;
+using System.Threading;
 
 namespace Template.Web
 {
     public class Startup
     {
         private readonly string AllowedSpecificOrigins = "_allowedSpecificOrigins";
+        private readonly bool DEBUG_LOADING_TIMES = false;
 
         public Startup(IConfiguration configuration)
         {
@@ -118,6 +120,16 @@ namespace Template.Web
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+
+                // Used for debugging loading spinners etc
+                app.Use(async (context, next) =>
+                {
+                    if (DEBUG_LOADING_TIMES)
+                    {
+                        Thread.Sleep(1000);
+                    }
+                    await next();
+                });
             }
             else
             {
@@ -125,6 +137,7 @@ namespace Template.Web
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
             app.UseCors(AllowedSpecificOrigins);
 
             app.UseHttpsRedirection();
