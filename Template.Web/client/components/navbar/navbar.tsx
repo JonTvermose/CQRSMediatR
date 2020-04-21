@@ -27,7 +27,10 @@ export const Navbar: FunctionComponent<NavbarProps> = () => {
 
     const administrationDropdowns = [
         { path: "/stringresources", text: Localizer.L("Localization") },
-        { path: "/logentries", text: Localizer.L("Log entries") }];
+        { path: "/logentries", text: Localizer.L("Log entries") },
+        { path: "/counter", text: Localizer.L("Counter") },
+    ];
+
     return (
         <header>
             <nav className="navbar navbar-expand-md navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">

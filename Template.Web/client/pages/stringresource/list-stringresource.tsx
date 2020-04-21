@@ -13,7 +13,7 @@ import Localizer from "../../services/LocalizerService";
 
 import { StringResourceItem } from "../../models/string-resource"
 
-type ListStringResourceProps = {}
+interface ListStringResourceProps {}
 
 const HeaderDiv = styled.div`
 font-size: 16px;

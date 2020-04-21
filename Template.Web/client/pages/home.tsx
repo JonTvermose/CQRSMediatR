@@ -4,7 +4,7 @@ import posed from 'react-pose';
 import { LoadingSpinner } from "../components/loading-spinner/loading-spinner";
 import Localizer from "../services/LocalizerService";
 
-type HomeProps = {}
+interface HomeProps { }
 
 declare const defaults: any;
 

@@ -7,7 +7,7 @@ import StringResourceService from "../../../services/StringResourceService";
 import Localizer from "../../../services/LocalizerService";
 import { StringResourceItem } from "../../../models/string-resource"
 
-type ListStringResourceItemProps = {
+interface ListStringResourceItemProps {
     item: StringResourceItem;
     languages: string[];
     onItemChange(item: StringResourceItem): void;

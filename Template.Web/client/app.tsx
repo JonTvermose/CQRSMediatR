@@ -14,6 +14,8 @@ import { Login } from "./pages/account/login";
 import { ForgotPassword } from "./pages/account/forgot-password";
 import { Profile } from "./pages/account/profile";
 import { ConfirmAccount } from "./pages/account/confirm-account";
+import { Counter } from "./boilerplates/functional-component";
+
 
 import { ListStringResource } from "./pages/stringresource/list-stringresource";
 
@@ -48,6 +50,7 @@ const App: React.FC = () => {
                         <PrivateRoute exact path="/home" component={Home} />
                         <PrivateRoute exact path="/logentries" component={ListLogEntry} />
                         <PrivateRoute path="/profile" component={Profile} />
+                        <PrivateRoute path="/counter" component={Counter} />
                         <PrivateRoute pattern="/stringresources" component={ListStringResource} />
                     </Switch>
                     <ToastContainer autoClose={8000} position={toast.POSITION.BOTTOM_CENTER} />

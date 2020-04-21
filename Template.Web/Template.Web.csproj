@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <None Remove="client\app.tsx" />
+    <None Remove="client\boilerplates\functional-component.tsx" />
     <None Remove="client\components\error-boundary\error-boundary.tsx" />
     <None Remove="client\components\loading-spinner\loading-spinner.tsx" />
     <None Remove="client\components\modal\modal.tsx" />
